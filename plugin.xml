@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="rudder-sdk-cordova" version="1.0.0">
+    <name>RudderStack's Cordova SDK</name>
+    <description>Repo for RudderStack's Cordova SDK - which allows you to track and send your event data from your Cordova apps to your desired destination platforms via RudderStack</description>
+    <license>MIT License</license>
+    <keywords>cordova,rudderstack,analytics</keywords>
+    <repo>https://github.com/rudderlabs/rudder-sdk-cordova.git</repo>
+    <!-- To be Added  -->
+    <!-- <engines>
+        <engine name="cordova" version=">=3.0.0" />
+        <engine name="cordova-android" version=">=4.0.0" />
+        <engine name="cordova-ios" version=">=3.0.0" />
+    </engines> -->
+    <js-module name="RudderClient" src="www/RudderClient.js">
+        <clobbers target="RudderClient" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="RudderSDKCordovaPlugin">
+                <param name="android-package" value="com.rudderstack.analytics.cordova.RudderSDKCordovaPlugin"/>
+                <param name="onload" value="true"/>
+            </feature>
+            <preference name="AndroidXEnabled" value="true" />
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        </config-file>
+        <framework src="com.rudderstack.android.sdk:core:1.+"/>
+        <source-file src="src/android/RudderSDKCordovaPlugin.java" target-dir="src/com/rudderstack/analytics/cordova"/>
+    </platform>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="RudderSDKCordovaPlugin">
+                <param name="ios-package" value="RudderSDKCordovaPlugin" />
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+            <pod name="Rudder" spec="~> 1.0.23" />
+        <header-file src="src/ios/RudderSDKCordovaPlugin.h" />
+        <source-file src="src/ios/RudderSDKCordovaPlugin.m" />
+    </platform>
+</plugin>

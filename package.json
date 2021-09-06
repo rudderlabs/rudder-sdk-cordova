@@ -1,0 +1,22 @@
+{
+  "name": "rudder-sdk-cordova",
+  "version": "1.0.0",
+  "description": "RudderStack's Cordova SDK - which allows you to track and send your event data from your Cordova apps to your desired destination platforms via RudderStack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rudderlabs/rudder-sdk-cordova.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova",
+    "rudderstack",
+    "analytics",
+    "attribution"
+  ],
+  "author": "Desu Sai Venkat <venkat@rudderstack.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rudderlabs/rudder-sdk-cordova/issues"
+  },
+  "homepage": "https://github.com/rudderlabs/rudder-sdk-cordova#readme"
+}
