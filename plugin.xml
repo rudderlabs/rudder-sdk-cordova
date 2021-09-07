@@ -31,6 +31,7 @@
         </config-file>
         <framework src="com.rudderstack.android.sdk:core:1.+"/>
         <source-file src="src/android/RudderSDKCordovaPlugin.java" target-dir="src/com/rudderstack/analytics/cordova"/>
+        <source-file src="src/android/Utils.java" target-dir="src/com/rudderstack/analytics/cordova"/>
     </platform>
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
@@ -42,5 +43,8 @@
             <pod name="Rudder" spec="~> 1.0.23" />
         <header-file src="src/ios/RudderSDKCordovaPlugin.h" />
         <source-file src="src/ios/RudderSDKCordovaPlugin.m" />
+        <header-file src="src/ios/Utils.h" />
+        <source-file src="src/ios/Utils.m" />
+
     </platform>
 </plugin>
