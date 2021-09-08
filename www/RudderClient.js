@@ -2,27 +2,44 @@ var exec = require('cordova/exec');
 
 var RudderClient = {};
 
-RudderClient.initialize = function (writeKey, config, options) {
-    if (!writeKey || !writeKey instanceof String) {
+RudderClient.loaded = false;
+
+// should promisify this call 
+RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, reject) => {
+    if ((typeof writeKey === "undefined") || !writeKey instanceof String) {
         console.log("WriteKey is Invalid, Aborting");
+        reject();
         return;
-    }
-    if (!config instanceof Object) {
-        config = {};
-    }
-    if (!options instanceof Object) {
-        options = {};
     }
 
     var params = [];
     params[0] = writeKey;
     params[1] = config;
     params[2] = options;
-    
-    exec(null, null, 'RudderSDKCordovaPlugin', 'initialize', params);
-}
+
+    console.log("Initializing Rudder Cordova SDK");
+
+    exec(() => {
+        RudderClient.loaded = true;
+        console.log("Initialized Rudder Cordova SDK Succesfully");
+        resolve();
+    }, (message) => {
+        RudderClient.loaded = false;
+        console.log(message);
+        reject();
+    }, 'RudderSDKCordovaPlugin', 'initialize', params);
+});
 
 RudderClient.identify = function (userId, traits, options) {
+    if (!RudderClient.loaded) {
+        console.log("SDK is not initialized yet, dropping identify call");
+        return;
+    }
+
+    if (!isValidString(userId)) {
+        console.log("userId is Invalid, dropping identify call");
+        return;
+    }
 
     var params = [];
     params[0] = userId;
@@ -33,6 +50,15 @@ RudderClient.identify = function (userId, traits, options) {
 };
 
 RudderClient.group = function (groupId, groupTraits, options) {
+    if (!RudderClient.loaded) {
+        console.log("SDK is not initialized yet, dropping group call");
+        return;
+    }
+
+    if (!isValidString(groupId)) {
+        console.log("groupId is Invalid, dropping group call");
+        return;
+    }
 
     var params = [];
     params[0] = groupId;
@@ -43,6 +69,15 @@ RudderClient.group = function (groupId, groupTraits, options) {
 };
 
 RudderClient.track = function (eventName, properties, options) {
+    if (!RudderClient.loaded) {
+        console.log("SDK is not initialized yet, dropping track call");
+        return;
+    }
+
+    if (!isValidString(eventName)) {
+        console.log("eventName is Invalid, dropping track call");
+        return;
+    }
 
     var params = [];
     params[0] = eventName;
@@ -53,6 +88,15 @@ RudderClient.track = function (eventName, properties, options) {
 };
 
 RudderClient.screen = function (screenName, properties, options) {
+    if (!RudderClient.loaded) {
+        console.log("SDK is not initialized yet, dropping screen call");
+        return;
+    }
+
+    if (!isValidString(screenName)) {
+        console.log("screenName is Invalid, dropping screen call");
+        return;
+    }
 
     var params = [];
     params[0] = screenName;
@@ -63,6 +107,15 @@ RudderClient.screen = function (screenName, properties, options) {
 };
 
 RudderClient.alias = function (newId, options) {
+    if (!RudderClient.loaded) {
+        console.log("SDK is not initialized yet, dropping alias call");
+        return;
+    }
+
+    if (!isValidString(newId)) {
+        console.log("newId is Invalid, dropping alias call");
+        return;
+    }
 
     var params = [];
     params[0] = newId;
@@ -72,15 +125,34 @@ RudderClient.alias = function (newId, options) {
 };
 
 RudderClient.reset = function () {
+    if (!RudderClient.loaded) {
+        console.log("SDK is not initialized yet, dropping reset call");
+        return;
+    }
+
     exec(null, null, 'RudderSDKCordovaPlugin', 'reset', []);
 };
 
 RudderClient.flush = function () {
+    if (!RudderClient.loaded) {
+        console.log("SDK is not initialized yet, dropping flush call");
+        return;
+    }
+
     exec(null, null, 'RudderSDKCordovaPlugin', 'flush', []);
 };
 
 RudderClient.optOut = function (optOut) {
-    
+    if (!RudderClient.loaded) {
+        console.log("SDK is not initialized yet, dropping optOut call");
+        return;
+    }
+
+    if (!isValidBoolean(optOut)) {
+        console.log("newId is Invalid, dropping alias call");
+        return;
+    }
+
     var params = [];
     params[0] = optOut;
 
@@ -88,6 +160,15 @@ RudderClient.optOut = function (optOut) {
 };
 
 RudderClient.putDeviceToken = function (deviceToken) {
+    if (!RudderClient.loaded) {
+        console.log("SDK is not initialized yet, dropping putDeviceToken call");
+        return;
+    }
+
+    if (!isValidString(deviceToken)) {
+        console.log("deviceToken is Invalid, dropping putDeviceToken call");
+        return;
+    }
 
     var params = [];
     params[0] = deviceToken;
@@ -95,22 +176,57 @@ RudderClient.putDeviceToken = function (deviceToken) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'putDeviceToken', params);
 }
 
-RudderClient.setAdvertisingId = function(advertisingId) {
+RudderClient.setAdvertisingId = function (advertisingId) {
+    if (device.platform === "iOS") {
+        if (!RudderClient.loaded) {
+            console.log("SDK is not initialized yet, dropping setAdvertisingId call");
+            return;
+        }
+    }
+
+    if (!isValidString(advertisingId)) {
+        console.log("advertisingId is Invalid, dropping setAdvertisingId call");
+        return;
+    }
+
     var params = [];
     params[0] = advertisingId;
 
     exec(null, null, 'RudderSDKCordovaPlugin', 'setAdvertisingId', params);
 }
 
-RudderClient.setAnonymousId = function(anonymousId) {
+RudderClient.setAnonymousId = function (anonymousId) {
+    if (!isValidString(anonymousId)) {
+        console.log("anonymousId is Invalid, dropping setAnonymousId call");
+        return;
+    }
+
     var params = [];
     params[0] = anonymousId;
 
     exec(null, null, 'RudderSDKCordovaPlugin', 'setAnonymousId', params);
 }
 
-RudderClient.getRudderContext = function(callback) {
+// Should promisify this as well
+RudderClient.getRudderContext = function (callback) {
+    if (!RudderClient.loaded) {
+        console.log("SDK is not initialized yet, dropping getRudderContext call");
+        return;
+    }
+
     exec(callback, null, 'RudderSDKCordovaPlugin', 'getRudderContext', params);
+}
+
+const isValidString = function (value) {
+    if (typeof value === "undefined")
+        return false;
+    return typeof value === "string" || value instanceof String
+}
+
+const isValidBoolean = function (value) {
+    if (typeof value === "undefined")
+        return false;
+    return typeof value === "boolean" || value instanceof Boolean
 }
 
 module.exports = RudderClient;
