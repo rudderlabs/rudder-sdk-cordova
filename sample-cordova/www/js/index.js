@@ -27,11 +27,11 @@ document.getElementById("track").onclick = function () {
 
 }
 
-function onDeviceReady() {
+async function onDeviceReady() {
     // Cordova is now initialized. Have fun!
     RudderClient.setAnonymousId("SampleAnonId");
-    RudderClient.initialize("1n0JdVPZTRUIkLXYccrWzZwdGSx", {
-        "dataPlaneUrl": "https://a9dc-175-101-36-4.ngrok.io",
+    await RudderClient.initialize("1n0JdVPZTRUIkLXYccrWzZwdGSx", {
+        "dataPlaneUrl": "https://a1cd-175-101-36-4.ngrok.io",
         "flushQueueSize": 30,
         "dbCountThreshold": 10000,
         "configRefreshInterval": 2,
