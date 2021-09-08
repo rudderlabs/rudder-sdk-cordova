@@ -16,12 +16,23 @@
 
 - (void)initialize:(CDVInvokedUrlCommand*)command
 {
-    [RSLogger logInfo:@"Initializing Rudder Cordova SDK"];
+    [self.commandDelegate runInBackground:^{
+    CDVPluginResult* pluginResult = nil;
     NSString* writeKey = [command.arguments objectAtIndex:0];
     RSConfig* config = [Utils getRudderConfig:[command.arguments objectAtIndex:1]];
     RSOption* option = [Utils getRudderOption:[command.arguments objectAtIndex:2]];
     [RSClient getInstance:writeKey config:config options:option];
-    [RSLogger logInfo:@"Initialized Rudder Cordova SDK"];
+    if([RSClient sharedInstance] == nil)
+    {
+       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+    else 
+    {
+       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    }
+    
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
 }
 
 - (void)identify:(CDVInvokedUrlCommand*)command
