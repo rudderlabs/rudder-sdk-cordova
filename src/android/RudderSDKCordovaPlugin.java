@@ -1,7 +1,5 @@
 package com.rudderstack.analytics.cordova;
 
-import android.telecom.Call;
-
 import com.rudderstack.android.sdk.core.RudderClient;
 import com.rudderstack.android.sdk.core.RudderConfig;
 import com.rudderstack.android.sdk.core.RudderOption;
@@ -12,22 +10,33 @@ import com.rudderstack.android.sdk.core.RudderLogger;
 import com.google.gson.Gson;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class RudderSDKCordovaPlugin extends CordovaPlugin {
 
     private static RudderClient rudderClient = null;
+    protected ExecutorService executor = null;
+
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        executor = Executors.newSingleThreadExecutor();
+    }
 
     @Override
     public boolean execute(
             String action,
             JSONArray args,
             CallbackContext callbackContext
-    )
-            throws JSONException {
+    ) {
         if ("initialize".equals(action)) {
             initialize(args, callbackContext);
             return true;
@@ -76,24 +85,22 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
         cordova
                 .getThreadPool()
                 .execute(
-                        new Runnable() {
-                            public void run() {
-                                String writeKey = Utils.optArgString(args, 0);
-                                RudderConfig config = Utils.getRudderConfig(args.optJSONObject(1));
-                                RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
-                                rudderClient =
-                                        RudderClient.getInstance(
-                                                cordova.getActivity(),
-                                                writeKey,
-                                                config,
-                                                options
-                                        );
-                                if (RudderClient.getInstance() != null) {
-                                    callbackContext.success();
-                                    return;
-                                }
-                                callbackContext.error("Failed to Initialize Rudder Cordova SDK");
+                        () -> {
+                            String writeKey = Utils.optArgString(args, 0);
+                            RudderConfig config = Utils.getRudderConfig(args.optJSONObject(1));
+                            RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
+                            rudderClient =
+                                    RudderClient.getInstance(
+                                            cordova.getActivity(),
+                                            writeKey,
+                                            config,
+                                            options
+                                    );
+                            if (RudderClient.getInstance() != null) {
+                                callbackContext.success();
+                                return;
                             }
+                            callbackContext.error("Failed to Initialize Rudder Cordova SDK");
                         });
     }
 
@@ -102,18 +109,14 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             RudderLogger.logWarn("Dropping the Identify call as SDK is not initialized yet");
             return;
         }
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                String userId = Utils.optArgString(args, 0);
-                                RudderTraits traits = Utils.getRudderTraits(args.optJSONObject(1));
-                                RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
-                                rudderClient.identify(userId, traits, options);
-                            }
-                        }
-                );
+        executor.execute(
+                () -> {
+                    String userId = Utils.optArgString(args, 0);
+                    RudderTraits traits = Utils.getRudderTraits(args.optJSONObject(1));
+                    RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
+                    rudderClient.identify(userId, traits, options);
+                }
+        );
     }
 
     private void group(JSONArray args) {
@@ -121,20 +124,16 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             RudderLogger.logWarn("Dropping the Group call as SDK is not initialized yet");
             return;
         }
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                String groupId = Utils.optArgString(args, 0);
-                                RudderTraits groupTraits = Utils.getRudderTraits(
-                                        args.optJSONObject(1)
-                                );
-                                RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
-                                rudderClient.group(groupId, groupTraits, options);
-                            }
-                        }
-                );
+        executor.execute(
+                () -> {
+                    String groupId = Utils.optArgString(args, 0);
+                    RudderTraits groupTraits = Utils.getRudderTraits(
+                            args.optJSONObject(1)
+                    );
+                    RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
+                    rudderClient.group(groupId, groupTraits, options);
+                }
+        );
     }
 
     private void track(JSONArray args) {
@@ -142,20 +141,16 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             RudderLogger.logWarn("Dropping the Track call as SDK is not initialized yet");
             return;
         }
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                String eventName = Utils.optArgString(args, 0);
-                                RudderProperty eventProperties = Utils.getRudderProperty(
-                                        args.optJSONObject(1)
-                                );
-                                RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
-                                rudderClient.track(eventName, eventProperties, options);
-                            }
-                        }
-                );
+        executor.execute(
+                () -> {
+                    String eventName = Utils.optArgString(args, 0);
+                    RudderProperty eventProperties = Utils.getRudderProperty(
+                            args.optJSONObject(1)
+                    );
+                    RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
+                    rudderClient.track(eventName, eventProperties, options);
+                }
+        );
     }
 
     private void screen(JSONArray args) {
@@ -163,20 +158,16 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             RudderLogger.logWarn("Dropping the Screen call as SDK is not initialized yet");
             return;
         }
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                String screenName = Utils.optArgString(args, 0);
-                                RudderProperty screenProperties = Utils.getRudderProperty(
-                                        args.optJSONObject(1)
-                                );
-                                RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
-                                rudderClient.screen(screenName, screenProperties, options);
-                            }
-                        }
-                );
+        executor.execute(
+                () -> {
+                    String screenName = Utils.optArgString(args, 0);
+                    RudderProperty screenProperties = Utils.getRudderProperty(
+                            args.optJSONObject(1)
+                    );
+                    RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
+                    rudderClient.screen(screenName, screenProperties, options);
+                }
+        );
     }
 
     private void alias(JSONArray args) {
@@ -184,17 +175,13 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             RudderLogger.logWarn("Dropping the Alias call as SDK is not initialized yet");
             return;
         }
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                String newUserId = Utils.optArgString(args, 0);
-                                RudderOption options = Utils.getRudderOption(args.optJSONObject(1));
-                                rudderClient.alias(newUserId, options);
-                            }
-                        }
-                );
+        executor.execute(
+                () -> {
+                    String newUserId = Utils.optArgString(args, 0);
+                    RudderOption options = Utils.getRudderOption(args.optJSONObject(1));
+                    rudderClient.alias(newUserId, options);
+                }
+        );
     }
 
     private void reset() {
@@ -202,15 +189,9 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             RudderLogger.logWarn("Dropping the Reset call as SDK is not initialized yet");
             return;
         }
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                rudderClient.reset();
-                            }
-                        }
-                );
+        executor.execute(
+                () -> rudderClient.reset()
+        );
 
     }
 
@@ -219,15 +200,9 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             RudderLogger.logWarn("Dropping the Flush call as SDK is not initialized yet");
             return;
         }
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                rudderClient.flush();
-                            }
-                        }
-                );
+        executor.execute(
+                () -> rudderClient.flush()
+        );
     }
 
     private void optOut(JSONArray args) {
@@ -235,15 +210,9 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             RudderLogger.logWarn("Dropping the optOut call as SDK is not initialized yet");
             return;
         }
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                rudderClient.optOut(args.optBoolean(0));
-                            }
-                        }
-                );
+        executor.execute(
+                () -> rudderClient.optOut(args.optBoolean(0))
+        );
     }
 
     private void putDeviceToken(JSONArray args) {
@@ -251,38 +220,20 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             RudderLogger.logWarn("Dropping the putDeviceToken call as SDK is not initialized yet");
             return;
         }
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                rudderClient.putDeviceToken(Utils.optArgString(args, 0));
-                            }
-                        }
-                );
+        executor.execute(
+                () -> rudderClient.putDeviceToken(Utils.optArgString(args, 0))
+        );
     }
 
     private void setAdvertisingId(JSONArray args) {
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                RudderClient.updateWithAdvertisingId(Utils.optArgString(args, 0));
-                            }
-                        });
+        executor.execute(
+                () -> RudderClient.updateWithAdvertisingId(Utils.optArgString(args, 0)));
     }
 
     private void setAnonymousId(JSONArray args) {
 
-        cordova
-                .getThreadPool()
-                .execute(
-                        new Runnable() {
-                            public void run() {
-                                RudderClient.setAnonymousId(Utils.optArgString(args, 0));
-                            }
-                        });
+        executor.execute(
+                () -> RudderClient.setAnonymousId(Utils.optArgString(args, 0)));
     }
 
     private void getRudderContext(JSONArray args, CallbackContext callbackContext) {
@@ -290,18 +241,21 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             RudderLogger.logWarn("Dropping the getRudderContext call as SDK is not initialized yet");
             return;
         }
-        Gson gson = new Gson();
-        JSONObject contextJson = null;
-        try {
-            contextJson = new JSONObject(gson.toJson(rudderClient.getRudderContext()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (contextJson != null) {
-            callbackContext.success(contextJson);
-            return;
-        }
-        callbackContext.error("Failed to retrieve Rudder Context");
+        executor.execute(
+                () -> {
+                    Gson gson = new Gson();
+                    JSONObject contextJson = null;
+                    try {
+                        contextJson = new JSONObject(gson.toJson(rudderClient.getRudderContext()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (contextJson != null) {
+                        callbackContext.success(contextJson);
+                        return;
+                    }
+                    callbackContext.error("Failed to retrieve Rudder Context");
+                });
     }
 
 }
