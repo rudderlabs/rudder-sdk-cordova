@@ -31,11 +31,11 @@ async function onDeviceReady() {
     // Cordova is now initialized. Have fun!
     RudderClient.setAnonymousId("SampleAnonId");
     await RudderClient.initialize("1n0JdVPZTRUIkLXYccrWzZwdGSx", {
-        "dataPlaneUrl": "https://a1cd-175-101-36-4.ngrok.io",
+        "dataPlaneUrl": "https://0ff6-175-101-36-4.ngrok.io",
         "flushQueueSize": 30,
         "dbCountThreshold": 10000,
         "configRefreshInterval": 2,
-        "logLevel": 5,
+        "logLevel": 0,
         "sleepTimeOut": 10,
         "trackLifecycleEvents": true,
         "recordScreenViews": true,
@@ -108,6 +108,7 @@ async function onDeviceReady() {
     RudderClient.alias("tempUserId", { "integrations": { "All": false, "Amplitude": true } })
     RudderClient.reset()
     RudderClient.flush()
+    const context = await RudderClient.getRudderContext();
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     // RudderClient.identify();
     document.getElementById('deviceready').classList.add('ready');

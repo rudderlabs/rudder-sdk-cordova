@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Another Page</title>
+</head>
+
+<body>
+    <Button id="track"> Track</Button>
+    <script src="cordova.js"></script>
+    <script>
+        document.addEventListener('deviceready', onDeviceReady, false);
+        async function onDeviceReady() {
+            console.log("Making track call from new page");
+            RudderClient.track("Track Triggered From New page");
+        }
+
+        document.getElementById("track").onclick = function() {
+            RudderClient.track("Track Triggered from Button");
+        }
+        
+    </script>
+</body>
+
+</html>
