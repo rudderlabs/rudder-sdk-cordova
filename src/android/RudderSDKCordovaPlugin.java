@@ -9,9 +9,12 @@ import com.rudderstack.android.sdk.core.RudderProperty;
 import com.rudderstack.android.sdk.core.RudderTraits;
 import com.rudderstack.android.sdk.core.RudderLogger;
 
+import com.google.gson.Gson;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.JSONException;
 
 public class RudderSDKCordovaPlugin extends CordovaPlugin {
@@ -61,11 +64,15 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
         } else if ("setAnonymousId".equals(action)) {
             setAnonymousId(args);
             return true;
+        } else if ("getRudderContext".equals(action)) {
+            getRudderContext(args, callbackContext);
+            return true;
         }
         return false;
     }
 
     private void initialize(JSONArray args, CallbackContext callbackContext) {
+
         cordova
                 .getThreadPool()
                 .execute(
@@ -267,6 +274,7 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
     }
 
     private void setAnonymousId(JSONArray args) {
+
         cordova
                 .getThreadPool()
                 .execute(
@@ -276,4 +284,24 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
                             }
                         });
     }
+
+    private void getRudderContext(JSONArray args, CallbackContext callbackContext) {
+        if (rudderClient == null) {
+            RudderLogger.logWarn("Dropping the getRudderContext call as SDK is not initialized yet");
+            return;
+        }
+        Gson gson = new Gson();
+        JSONObject contextJson = null;
+        try {
+            contextJson = new JSONObject(gson.toJson(rudderClient.getRudderContext()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (contextJson != null) {
+            callbackContext.success(contextJson);
+            return;
+        }
+        callbackContext.error("Failed to retrieve Rudder Context");
+    }
+
 }

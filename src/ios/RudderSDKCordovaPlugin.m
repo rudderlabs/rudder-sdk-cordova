@@ -178,4 +178,32 @@
     [RSClient setAnonymousId:anonymousId];
 }
 
+- (void)getRudderContext:(CDVInvokedUrlCommand*)command
+{
+    if ([RSClient sharedInstance] == nil)
+    {
+        [RSLogger logWarn:@"Dropping the getRudderContext call as SDK is not initialized yet"];
+        return;
+    }
+
+    [self.commandDelegate runInBackground:^{
+
+    CDVPluginResult* pluginResult = nil;
+    NSDictionary* context = [[[RSClient sharedInstance] getContext] dict];
+
+    if(context == nil)
+    {
+       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+    else 
+    {
+       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:context];
+    }
+    
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
+}
+
+
+
 @end

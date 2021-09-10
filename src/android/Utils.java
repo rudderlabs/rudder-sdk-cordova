@@ -55,7 +55,7 @@ public class Utils {
         if (configMap.containsKey("controlPlaneUrl") && getString(configMap.get("controlPlaneUrl")) != null) {
             configBuilder = configBuilder.withControlPlaneUrl(getString(configMap.get("controlPlaneUrl")));
         }
-        
+
         return configBuilder.build();
     }
 

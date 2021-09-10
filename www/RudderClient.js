@@ -12,6 +12,11 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
         return;
     }
 
+    if (isOptions(config)) {
+        options = config;
+        config = null;
+    }
+
     var params = [];
     params[0] = writeKey;
     params[1] = config;
@@ -26,7 +31,7 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
     }, (message) => {
         RudderClient.loaded = false;
         console.log(message);
-        reject();
+        reject(message);
     }, 'RudderSDKCordovaPlugin', 'initialize', params);
 });
 
@@ -39,6 +44,11 @@ RudderClient.identify = function (userId, traits, options) {
     if (!isValidString(userId)) {
         console.log("userId is Invalid, dropping identify call");
         return;
+    }
+
+    if (isOptions(traits)) {
+        options = traits;
+        traits = null;
     }
 
     var params = [];
@@ -60,6 +70,11 @@ RudderClient.group = function (groupId, groupTraits, options) {
         return;
     }
 
+    if (isOptions(groupTraits)) {
+        options = groupTraits;
+        groupTraits = null;
+    }
+
     var params = [];
     params[0] = groupId;
     params[1] = groupTraits;
@@ -79,6 +94,11 @@ RudderClient.track = function (eventName, properties, options) {
         return;
     }
 
+    if (isOptions(properties)) {
+        options = properties;
+        properties = null;
+    }
+
     var params = [];
     params[0] = eventName;
     params[1] = properties;
@@ -96,6 +116,11 @@ RudderClient.screen = function (screenName, properties, options) {
     if (!isValidString(screenName)) {
         console.log("screenName is Invalid, dropping screen call");
         return;
+    }
+
+    if (isOptions(properties)) {
+        options = properties;
+        properties = null;
     }
 
     var params = [];
@@ -208,14 +233,20 @@ RudderClient.setAnonymousId = function (anonymousId) {
 }
 
 // Should promisify this as well
-RudderClient.getRudderContext = function (callback) {
+RudderClient.getRudderContext = () => new Promise((resolve, reject) => {
     if (!RudderClient.loaded) {
         console.log("SDK is not initialized yet, dropping getRudderContext call");
         return;
     }
 
-    exec(callback, null, 'RudderSDKCordovaPlugin', 'getRudderContext', params);
-}
+    exec((context) => {
+        console.log("Retrieved Rudder Context Succesfully");
+        resolve(context);
+    }, (message) => {
+        console.log(message);
+        reject(message);
+    }, 'RudderSDKCordovaPlugin', 'getRudderContext', null);
+});
 
 const isValidString = function (value) {
     if (typeof value === "undefined")
@@ -227,6 +258,13 @@ const isValidBoolean = function (value) {
     if (typeof value === "undefined")
         return false;
     return typeof value === "boolean" || value instanceof Boolean
+}
+
+const isOptions = function (value) {
+    if (value && (value.integrations || value.externalIds)) {
+        return true;
+    }
+    return false;
 }
 
 module.exports = RudderClient;
