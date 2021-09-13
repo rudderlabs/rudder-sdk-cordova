@@ -61,9 +61,6 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
         } else if ("flush".equals(action)) {
             flush();
             return true;
-        } else if ("optOut".equals(action)) {
-            optOut(args);
-            return true;
         } else if ("putDeviceToken".equals(action)) {
             putDeviceToken(args);
             return true;
@@ -72,9 +69,6 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             return true;
         } else if ("setAnonymousId".equals(action)) {
             setAnonymousId(args);
-            return true;
-        } else if ("getRudderContext".equals(action)) {
-            getRudderContext(args, callbackContext);
             return true;
         }
         return false;
@@ -205,15 +199,6 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
         );
     }
 
-    private void optOut(JSONArray args) {
-        if (rudderClient == null) {
-            RudderLogger.logWarn("Dropping the optOut call as SDK is not initialized yet");
-            return;
-        }
-        executor.execute(
-                () -> rudderClient.optOut(args.optBoolean(0))
-        );
-    }
 
     private void putDeviceToken(JSONArray args) {
         if (rudderClient == null) {
@@ -235,27 +220,4 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
         executor.execute(
                 () -> RudderClient.setAnonymousId(Utils.optArgString(args, 0)));
     }
-
-    private void getRudderContext(JSONArray args, CallbackContext callbackContext) {
-        if (rudderClient == null) {
-            RudderLogger.logWarn("Dropping the getRudderContext call as SDK is not initialized yet");
-            return;
-        }
-        executor.execute(
-                () -> {
-                    Gson gson = new Gson();
-                    JSONObject contextJson = null;
-                    try {
-                        contextJson = new JSONObject(gson.toJson(rudderClient.getRudderContext()));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if (contextJson != null) {
-                        callbackContext.success(contextJson);
-                        return;
-                    }
-                    callbackContext.error("Failed to retrieve Rudder Context");
-                });
-    }
-
 }

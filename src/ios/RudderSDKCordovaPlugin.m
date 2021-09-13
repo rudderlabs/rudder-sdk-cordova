@@ -18,7 +18,7 @@
 {
     [self.commandDelegate runInBackground:^{
         CDVPluginResult* pluginResult = nil;
-        NSString* writeKey = [command.arguments objectAtIndex:0];
+        NSString* writeKey = [Utils getStringFromArguments:command.arguments atIndex:0];
         RSConfig* config = [Utils getRudderConfig:[command.arguments objectAtIndex:1]];
         RSOption* option = [Utils getRudderOption:[command.arguments objectAtIndex:2]];
         [RSClient getInstance:writeKey config:config options:option];
@@ -45,7 +45,7 @@
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                   ^{
         NSString* userId = [command.arguments objectAtIndex:0];
-        NSDictionary* userTraits = [command.arguments objectAtIndex:1];
+        NSDictionary* userTraits = [Utils getDictionaryFromArguments:command.arguments atIndex:1];
         RSOption* option = [Utils getRudderOption:[command.arguments objectAtIndex:2]];
         [[RSClient sharedInstance] identify:userId traits:userTraits options:option];
     });
@@ -60,8 +60,8 @@
     }
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                   ^{
-        NSString* groupId = [command.arguments objectAtIndex:0];
-        NSDictionary* groupTraits = [command.arguments objectAtIndex:1];
+        NSString* groupId = [Utils getStringFromArguments:command.arguments atIndex:0];
+        NSDictionary* groupTraits = [Utils getDictionaryFromArguments:command.arguments atIndex:1];
         RSOption* option = [Utils getRudderOption:[command.arguments objectAtIndex:2]];
         [[RSClient sharedInstance]group:groupId traits:groupTraits options:option];
     });
@@ -76,8 +76,8 @@
     }
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                   ^{
-        NSString* eventName = [command.arguments objectAtIndex:0];
-        NSDictionary* eventProperties = [command.arguments objectAtIndex:1];
+        NSString* eventName = [Utils getStringFromArguments:command.arguments atIndex:0];
+        NSDictionary* eventProperties = [Utils getDictionaryFromArguments:command.arguments atIndex:1];
         RSOption* option = [Utils getRudderOption:[command.arguments objectAtIndex:2]];
         [[RSClient sharedInstance]track:eventName properties:eventProperties options:option];
     });
@@ -92,8 +92,8 @@
     }
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                   ^{
-        NSString* screenName = [command.arguments objectAtIndex:0];
-        NSDictionary* screenProperties = [command.arguments objectAtIndex:1];
+        NSString* screenName = [Utils getStringFromArguments:command.arguments atIndex:0];
+        NSDictionary* screenProperties = [Utils getDictionaryFromArguments:command.arguments atIndex:1];
         RSOption* option = [Utils getRudderOption:[command.arguments objectAtIndex:2]];
         [[RSClient sharedInstance]screen:screenName properties:screenProperties options:option];
     });
@@ -108,7 +108,7 @@
     }
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                   ^{
-        NSString* newId = [command.arguments objectAtIndex:0];
+        NSString* newId = [Utils getStringFromArguments:command.arguments atIndex:0];
         RSOption* option = [Utils getRudderOption:[command.arguments objectAtIndex:1]];
         [[RSClient sharedInstance] alias:newId options:option];
     });
@@ -140,19 +140,6 @@
     });
 }
 
-- (void)optOut:(CDVInvokedUrlCommand*)command
-{
-    if ([RSClient sharedInstance] == nil)
-    {
-        [RSLogger logWarn:@"Dropping the optOut call as SDK is not initialized yet"];
-        return;
-    }
-    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-                  ^{
-        BOOL optOut = [command.arguments objectAtIndex:0];
-        [[RSClient sharedInstance] optOut:optOut];
-    });
-}
 
 - (void)putDeviceToken:(CDVInvokedUrlCommand*)command
 {
@@ -163,7 +150,7 @@
     }
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                   ^{
-        NSString* deviceToken = [command.arguments objectAtIndex:0];
+        NSString* deviceToken = [Utils getStringFromArguments:command.arguments atIndex:0];
         [[[RSClient sharedInstance] getContext] putDeviceToken:deviceToken];
     });
 }
@@ -177,7 +164,7 @@
     }
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                   ^{
-        NSString* advertisingId = [command.arguments objectAtIndex:0];
+        NSString* advertisingId = [Utils getStringFromArguments:command.arguments atIndex:0];
         [[[RSClient sharedInstance] getContext] putAdvertisementId:advertisingId];
     });
 }
@@ -187,34 +174,5 @@
     NSString* anonymousId = [command.arguments objectAtIndex:0];
     [RSClient setAnonymousId:anonymousId];
 }
-
-- (void)getRudderContext:(CDVInvokedUrlCommand*)command
-{
-    if ([RSClient sharedInstance] == nil)
-    {
-        [RSLogger logWarn:@"Dropping the getRudderContext call as SDK is not initialized yet"];
-        return;
-    }
-    
-    dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
-                  ^{
-        
-        CDVPluginResult* pluginResult = nil;
-        NSDictionary* context = [[[RSClient sharedInstance] getContext] dict];
-        
-        if(context == nil)
-        {
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-        }
-        else
-        {
-            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:context];
-        }
-        
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    });
-}
-
-
 
 @end

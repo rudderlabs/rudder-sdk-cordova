@@ -7,6 +7,8 @@
 + (RSConfig *) getRudderConfig: (NSDictionary *) config;
 + (NSString *) getString:(NSObject *) object;
 + (int) getInteger: (NSObject *) object;
++ (NSDictionary *) getDictionaryFromArguments: (NSArray *) arguments atIndex: (int) index;
++ (NSString *) getStringFromArguments: (NSArray *) arguments atIndex: (int) index;
 
 @end
 

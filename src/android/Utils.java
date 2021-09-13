@@ -74,7 +74,7 @@ public class Utils {
         if (optionsMap.containsKey("integrations")) {
             Map<String, Object> integrationsMap = (Map<String, Object>) optionsMap.get("integrations");
             for (Map.Entry<String, Object> entry : integrationsMap.entrySet()) {
-                option.putIntegration(entry.getKey(), (boolean) entry.getValue());
+                option.putIntegration(entry.getKey(), getBoolean(entry.getValue()));
             }
         }
         return option;
@@ -249,6 +249,9 @@ public class Utils {
             } else {
                 return false;
             }
+        }
+        if (value instanceof String) {
+            return Boolean.parseBoolean((String) value);
         }
         return false;
     }

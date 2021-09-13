@@ -3,8 +3,8 @@
 @implementation Utils
 
 + (RSOption*) getRudderOption: (NSDictionary *) optionsDict {
-    RSOption * options = [[RSOption alloc]init];
-    if(optionsDict == nil)
+    RSOption * options = [[RSOption alloc] init];
+    if([optionsDict class] == [NSNull class])
     {
         return options;
     }
@@ -28,7 +28,7 @@
 }
 
 + (RSConfig *) getRudderConfig: (NSDictionary *) configDict {
-    if(configDict == nil)
+    if([configDict class] == [NSNull class])
     {
         return [[RSConfig alloc] init];
     }
@@ -97,5 +97,27 @@
     }
     return -1;
 }
+
++ (NSDictionary *) getDictionaryFromArguments: (NSArray *) arguments atIndex: (int) index
+{
+    NSDictionary* argument = [arguments objectAtIndex:index];
+    if([argument class] == [NSNull class])
+    {
+        return nil;
+    }
+    return argument;
+}
+
++ (NSString *) getStringFromArguments: (NSArray *) arguments atIndex: (int) index
+{
+    NSString* argument = [arguments objectAtIndex:index];
+    if([argument class] == [NSNull class])
+    {
+        return nil;
+    }
+    return argument;
+    
+}
+
 
 @end
