@@ -7,22 +7,19 @@ import com.rudderstack.android.sdk.core.RudderProperty;
 import com.rudderstack.android.sdk.core.RudderTraits;
 import com.rudderstack.android.sdk.core.RudderLogger;
 
-import com.google.gson.Gson;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RudderSDKCordovaPlugin extends CordovaPlugin {
 
-    private static RudderClient rudderClient = null;
+    private RudderClient rudderClient = null;
     protected ExecutorService executor = null;
 
     @Override
