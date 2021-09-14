@@ -61,10 +61,10 @@
     {
         [configBuilder withTrackLifecycleEvens:[configDict[@"trackLifecycleEvents"] boolValue]];
     }
-    if(configDict[@"recordScreenViews"])
-    {
-        [configBuilder withRecordScreenViews:[configDict[@"recordScreenViews"] boolValue]];
-    }
+    // if(configDict[@"recordScreenViews"])
+    // {
+    //     [configBuilder withRecordScreenViews:[configDict[@"recordScreenViews"] boolValue]];
+    // }
     if(configDict[@"controlPlaneUrl"] && [self getString:configDict[@"controlPlaneUrl"]] != nil)
     {
         [configBuilder withControlPlaneUrl:[self getString:configDict[@"controlPlaneUrl"]]];

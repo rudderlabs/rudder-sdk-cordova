@@ -10,7 +10,6 @@
     <repo>https://github.com/rudderlabs/rudder-sdk-cordova.git</repo>
     <!-- To be Added  -->
     <!-- <engines><engine name="cordova" version=">=3.0.0" /><engine name="cordova-android" version=">=4.0.0" /><engine name="cordova-ios" version=">=3.0.0" /></engines> -->
-    <dependency id="cordova-plugin-device" />
     <js-module name="RudderClient" src="www/RudderClient.js">
         <clobbers target="RudderClient" />
     </js-module>

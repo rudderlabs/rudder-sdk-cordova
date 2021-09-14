@@ -52,9 +52,9 @@ public class Utils {
         if (configMap.containsKey(RudderConfigConstants.trackLifecycleEvents)) {
             configBuilder = configBuilder.withTrackLifecycleEvents(getBoolean(configMap.get(RudderConfigConstants.trackLifecycleEvents)));
         }
-        if (configMap.containsKey(RudderConfigConstants.recordScreenViews)) {
-            configBuilder = configBuilder.withRecordScreenViews(getBoolean(configMap.get(RudderConfigConstants.recordScreenViews)));
-        }
+        // if (configMap.containsKey(RudderConfigConstants.recordScreenViews)) {
+        //     configBuilder = configBuilder.withRecordScreenViews(getBoolean(configMap.get(RudderConfigConstants.recordScreenViews)));
+        // }
         if (configMap.containsKey(RudderConfigConstants.controlPlaneUrl) && getString(configMap.get(RudderConfigConstants.controlPlaneUrl)) != null) {
             configBuilder = configBuilder.withControlPlaneUrl(getString(configMap.get(RudderConfigConstants.controlPlaneUrl)));
         }
@@ -283,7 +283,7 @@ class RudderConfigConstants {
     static String sleepTimeOut = "sleepTimeOut";
     static String controlPlaneUrl = "controlPlaneUrl";
     static String trackLifecycleEvents = "trackLifecycleEvents";
-    static String recordScreenViews = "recordScreenViews";
+    // static String recordScreenViews = "recordScreenViews";
 
 }
 
