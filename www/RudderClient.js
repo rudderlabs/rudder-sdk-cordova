@@ -3,10 +3,9 @@ var exec = require('cordova/exec');
 var RudderClient = {};
 
 RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, reject) => {
-    if ((typeof writeKey === "undefined") || !writeKey instanceof String) {
-        console.log("WriteKey is Invalid, Aborting");
-        reject();
-        return;
+    if (!isValidString(writeKey)) {
+        console.log('WriteKey is Invalid, Aborting SDK Initialization');
+        throw new Error('WriteKey is Invalid, Aborting SDK Initialization');
     }
 
     if (isOptions(config)) {
@@ -27,7 +26,7 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
         resolve();
     }, (message) => {
         console.log(message);
-        reject(message);
+        throw new Error(message);
     }, 'RudderSDKCordovaPlugin', 'initialize', params);
 });
 
