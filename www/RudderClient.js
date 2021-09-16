@@ -165,6 +165,14 @@ RudderClient.setAnonymousId = function (anonymousId) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'setAnonymousId', params);
 }
 
+RudderClient.LogLevel = {
+    VERBOSE :  5,
+    DEBUG : 4,
+    INFO : 3,
+    WARN : 2,
+    ERROR : 1,
+    NONE : 0
+}
 
 const isValidString = function (value) {
     if (typeof value === "undefined")
