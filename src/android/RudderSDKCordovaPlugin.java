@@ -34,41 +34,43 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             JSONArray args,
             CallbackContext callbackContext
     ) {
-        if ("initialize".equals(action)) {
-            initialize(args, callbackContext);
-            return true;
-        } else if ("identify".equals(action)) {
-            identify(args);
-            return true;
-        } else if ("group".equals(action)) {
-            group(args);
-            return true;
-        } else if ("track".equals(action)) {
-            track(args);
-            return true;
-        } else if ("screen".equals(action)) {
-            screen(args);
-            return true;
-        } else if ("alias".equals(action)) {
-            alias(args);
-            return true;
-        } else if ("reset".equals(action)) {
-            reset();
-            return true;
-        } else if ("flush".equals(action)) {
-            flush();
-            return true;
-        } else if ("putDeviceToken".equals(action)) {
-            putDeviceToken(args);
-            return true;
-        } else if ("setAdvertisingId".equals(action)) {
-            setAdvertisingId(args);
-            return true;
-        } else if ("setAnonymousId".equals(action)) {
-            setAnonymousId(args);
-            return true;
+        switch (action) {
+            case "initialize":
+                initialize(args, callbackContext);
+                return true;
+            case "identify":
+                identify(args);
+                return true;
+            case "group":
+                group(args);
+                return true;
+            case "track":
+                track(args);
+                return true;
+            case "screen":
+                screen(args);
+                return true;
+            case "alias":
+                alias(args);
+                return true;
+            case "reset":
+                reset();
+                return true;
+            case "flush":
+                flush();
+                return true;
+            case "putDeviceToken":
+                putDeviceToken(args);
+                return true;
+            case "setAdvertisingId":
+                setAdvertisingId(args);
+                return true;
+            case "setAnonymousId":
+                setAnonymousId(args);
+                return true;
+            default:
+                return false;
         }
-        return false;
     }
 
     private void initialize(JSONArray args, CallbackContext callbackContext) {
