@@ -35,7 +35,7 @@ async function onDeviceReady() {
         "flushQueueSize": 30,
         "dbCountThreshold": 10000,
         "configRefreshInterval": 2,
-        "logLevel": 5,
+        "logLevel": RudderClient.LogLevel.VERBOSE,
         "sleepTimeOut": 10,
         "trackLifecycleEvents": true,
         "controlPlaneUrl": "https://api.rudderstack.com"
