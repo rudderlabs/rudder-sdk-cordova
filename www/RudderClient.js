@@ -13,6 +13,12 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
         config = null;
     }
 
+    if(!isOptions(options))
+    {
+        console.log('Options is invalid, setting it to null');
+        options = null;
+    }
+
     var params = [];
     params[0] = writeKey;
     params[1] = config;
@@ -41,6 +47,12 @@ RudderClient.identify = function (userId, traits, options) {
         traits = null;
     }
 
+    if(!isOptions(options))
+    {
+        console.log('Options is invalid, setting it to null');
+        options = null;
+    }
+
     var params = [];
     params[0] = userId;
     params[1] = traits;
@@ -58,6 +70,12 @@ RudderClient.group = function (groupId, groupTraits, options) {
     if (isOptions(groupTraits)) {
         options = groupTraits;
         groupTraits = null;
+    }
+
+    if(!isOptions(options))
+    {
+        console.log('Options is invalid, setting it to null');
+        options = null;
     }
 
     var params = [];
@@ -79,6 +97,12 @@ RudderClient.track = function (eventName, properties, options) {
         properties = null;
     }
 
+    if(!isOptions(options))
+    {
+        console.log('Options is invalid, setting it to null');
+        options = null;
+    }
+
     var params = [];
     params[0] = eventName;
     params[1] = properties;
@@ -98,6 +122,12 @@ RudderClient.screen = function (screenName, properties, options) {
         properties = null;
     }
 
+    if(!isOptions(options))
+    {
+        console.log('Options is invalid, setting it to null');
+        options = null;
+    }
+
     var params = [];
     params[0] = screenName;
     params[1] = properties;
@@ -110,6 +140,12 @@ RudderClient.alias = function (newId, options) {
     if (!isValidString(newId)) {
         console.log("newId is Invalid, dropping alias call");
         return;
+    }
+
+    if(!isOptions(options))
+    {
+        console.log('Options is invalid, setting it to null');
+        options = null;
     }
 
     var params = [];
@@ -166,16 +202,18 @@ RudderClient.setAnonymousId = function (anonymousId) {
 }
 
 RudderClient.LogLevel = {
-    VERBOSE :  5,
-    DEBUG : 4,
-    INFO : 3,
-    WARN : 2,
-    ERROR : 1,
-    NONE : 0
+    VERBOSE: 5,
+    DEBUG: 4,
+    INFO: 3,
+    WARN: 2,
+    ERROR: 1,
+    NONE: 0
 }
 
 const isValidString = function (value) {
     if (typeof value === "undefined")
+        return false;
+    if (value === "")
         return false;
     return typeof value === "string" || value instanceof String
 }
