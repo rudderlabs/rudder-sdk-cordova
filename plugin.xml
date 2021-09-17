@@ -9,11 +9,7 @@
     <keywords>cordova,rudderstack,analytics</keywords>
     <repo>https://github.com/rudderlabs/rudder-sdk-cordova.git</repo>
     <!-- To be Added  -->
-    <!-- <engines>
-        <engine name="cordova" version=">=3.0.0" />
-        <engine name="cordova-android" version=">=4.0.0" />
-        <engine name="cordova-ios" version=">=3.0.0" />
-    </engines> -->
+    <!-- <engines><engine name="cordova" version=">=3.0.0" /><engine name="cordova-android" version=">=4.0.0" /><engine name="cordova-ios" version=">=3.0.0" /></engines> -->
     <js-module name="RudderClient" src="www/RudderClient.js">
         <clobbers target="RudderClient" />
     </js-module>
@@ -31,6 +27,7 @@
         </config-file>
         <framework src="com.rudderstack.android.sdk:core:1.+"/>
         <source-file src="src/android/RudderSDKCordovaPlugin.java" target-dir="src/com/rudderstack/analytics/cordova"/>
+        <source-file src="src/android/Utils.java" target-dir="src/com/rudderstack/analytics/cordova"/>
     </platform>
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
@@ -39,8 +36,17 @@
                 <param name="onload" value="true"/>
             </feature>
         </config-file>
-            <pod name="Rudder" spec="~> 1.0.23" />
+        <podspec>
+            <config>
+                <source url="https://cdn.cocoapods.org/"/>
+            </config>
+            <pods>
+                <pod name="Rudder" spec="~> 1.0.23" />
+            </pods>
+        </podspec>
         <header-file src="src/ios/RudderSDKCordovaPlugin.h" />
         <source-file src="src/ios/RudderSDKCordovaPlugin.m" />
+        <header-file src="src/ios/Utils.h" />
+        <source-file src="src/ios/Utils.m" />
     </platform>
 </plugin>

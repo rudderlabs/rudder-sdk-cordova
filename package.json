@@ -1,13 +1,15 @@
 {
   "name": "rudder-sdk-cordova",
-  "version": "1.0.0",
+  "version": "1.0.0-beta1",
   "description": "RudderStack's Cordova SDK - which allows you to track and send your event data from your Cordova apps to your desired destination platforms via RudderStack",
   "repository": {
     "type": "git",
-    "url": "https://github.com/rudderlabs/rudder-sdk-cordova.git"
+    "url": "git+https://github.com/rudderlabs/rudder-sdk-cordova.git"
   },
   "keywords": [
     "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
     "cordova",
     "rudderstack",
     "analytics",
@@ -18,5 +20,23 @@
   "bugs": {
     "url": "https://github.com/rudderlabs/rudder-sdk-cordova/issues"
   },
-  "homepage": "https://github.com/rudderlabs/rudder-sdk-cordova#readme"
+  "homepage": "https://github.com/rudderlabs/rudder-sdk-cordova#readme",
+  "cordova": {
+    "id": "rudder-sdk-cordova",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "engines": {
+    "cordovaDependencies": {
+        "1.0.0": { 
+          "cordova-android": ">8.0.0",
+          "cordova-ios": ">5.0.0"
+        }
+    },
+    "files": [
+      "./sample-cordova/*"
+    ]
+}
 }
