@@ -38,7 +38,8 @@ async function onDeviceReady() {
         "logLevel": RudderClient.LogLevel.VERBOSE,
         "sleepTimeOut": 10,
         "trackLifecycleEvents": true,
-        "controlPlaneUrl": "https://api.rudderstack.com"
+        "controlPlaneUrl": "https://api.rudderstack.com",
+        "factories": [RudderAppCenterFactory]
     }, {
         "integrations": {
             "MixPanel": true,
