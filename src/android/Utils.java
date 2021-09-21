@@ -58,6 +58,10 @@ public class Utils {
         if (configMap.containsKey(RudderConfigConstants.controlPlaneUrl) && getString(configMap.get(RudderConfigConstants.controlPlaneUrl)) != null) {
             configBuilder = configBuilder.withControlPlaneUrl(getString(configMap.get(RudderConfigConstants.controlPlaneUrl)));
         }
+        if(RudderSDKCordovaPlugin.factories.size()>0)
+        {
+            configBuilder = configBuilder.withFactories(RudderSDKCordovaPlugin.factories);
+        }
 
         return configBuilder.build();
     }

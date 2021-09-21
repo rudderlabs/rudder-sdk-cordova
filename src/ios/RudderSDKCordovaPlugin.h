@@ -16,4 +16,7 @@
 - (void)setAdvertisingId:(CDVInvokedUrlCommand*)command;
 - (void)setAnonymousId:(CDVInvokedUrlCommand*)command;
 
++ (void) addFactory:(id<RSIntegrationFactory>) factory;
++ (NSMutableArray*) getFactories;
+
 @end

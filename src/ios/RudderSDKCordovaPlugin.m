@@ -2,6 +2,7 @@
 #import "Utils.h"
 #import <Cordova/CDV.h>
 
+static NSMutableArray* factories;
 
 @implementation RudderSDKCordovaPlugin : CDVPlugin
 
@@ -173,6 +174,18 @@
 {
     NSString* anonymousId = [command.arguments objectAtIndex:0];
     [RSClient setAnonymousId:anonymousId];
+}
+
++ (void) addFactory:(id<RSIntegrationFactory>) factory 
+{
+    if (factories == nil) {
+        factories = [[NSMutableArray alloc] init];
+    }
+    [factories addObject:factory];
+}
+
++ (NSMutableArray*) getFactories {
+    return factories;
 }
 
 @end

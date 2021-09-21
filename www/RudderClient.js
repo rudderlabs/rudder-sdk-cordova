@@ -13,8 +13,7 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
         config = null;
     }
 
-    if(!isOptions(options))
-    {
+    if (!isOptions(options)) {
         console.log('Options is invalid, setting it to null');
         options = null;
     }
@@ -23,6 +22,8 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
     params[0] = writeKey;
     params[1] = config;
     params[2] = options;
+
+    initializeFactories(config);
 
     console.log("Initializing Rudder Cordova SDK");
 
@@ -47,8 +48,7 @@ RudderClient.identify = function (userId, traits, options) {
         traits = null;
     }
 
-    if(!isOptions(options))
-    {
+    if (!isOptions(options)) {
         console.log('Options is invalid, setting it to null');
         options = null;
     }
@@ -72,8 +72,7 @@ RudderClient.group = function (groupId, groupTraits, options) {
         groupTraits = null;
     }
 
-    if(!isOptions(options))
-    {
+    if (!isOptions(options)) {
         console.log('Options is invalid, setting it to null');
         options = null;
     }
@@ -97,8 +96,7 @@ RudderClient.track = function (eventName, properties, options) {
         properties = null;
     }
 
-    if(!isOptions(options))
-    {
+    if (!isOptions(options)) {
         console.log('Options is invalid, setting it to null');
         options = null;
     }
@@ -122,8 +120,7 @@ RudderClient.screen = function (screenName, properties, options) {
         properties = null;
     }
 
-    if(!isOptions(options))
-    {
+    if (!isOptions(options)) {
         console.log('Options is invalid, setting it to null');
         options = null;
     }
@@ -142,8 +139,7 @@ RudderClient.alias = function (newId, options) {
         return;
     }
 
-    if(!isOptions(options))
-    {
+    if (!isOptions(options)) {
         console.log('Options is invalid, setting it to null');
         options = null;
     }
@@ -208,6 +204,20 @@ RudderClient.LogLevel = {
     WARN: 2,
     ERROR: 1,
     NONE: 0
+}
+
+const initializeFactories = function (config) {
+    if (config && config.factories && Array.isArray(config.factories)) {
+        try {
+            config.factories.forEach(factory => factory.setup());
+        }
+        catch (err) {
+            document.getElementById("demo").innerHTML = err.message;
+        }
+    }
+    else {
+      console.log("Unable to initialize factories, as an invalid value is passed")
+    }
 }
 
 const isValidString = function (value) {
