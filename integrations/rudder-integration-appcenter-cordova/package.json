@@ -1,0 +1,40 @@
+{
+    "name": "rudder-integration-appcenter-cordova",
+    "version": "1.0.0",
+    "description": "RudderStack's Cordova Implementation for Visual Studio App Center",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/rudderlabs/rudder-sdk-cordova.git"
+    },
+    "keywords": [
+      "ecosystem:cordova",
+      "cordova-android",
+      "cordova-ios",
+      "cordova",
+      "appcenter",
+      "rudderstack",
+      "analytics",
+      "attribution"
+    ],
+    "author": "Desu Sai Venkat <venkat@rudderstack.com>",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/rudderlabs/rudder-sdk-cordova/issues"
+    },
+    "homepage": "https://github.com/rudderlabs/rudder-sdk-cordova#readme",
+    "cordova": {
+      "id": "rudder-integration-appcenter-cordova",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "engines": {
+      "cordovaDependencies": {
+          "1.0.0": { 
+            "=cordova-android": ">8.0.0",
+            "cordova-ios": ">5.0.0"
+          }
+      }
+  }
+  }

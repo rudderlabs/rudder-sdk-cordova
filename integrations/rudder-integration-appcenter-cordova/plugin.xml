@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="rudder-integration-appcenter-cordova" version="1.0.0">
+    <name>RudderStack's Cordova App Center Device Mode Factory</name>
+    <description>RudderStack's Cordova Implementation for Visual Studio App Center</description>
+    <license>MIT License</license>
+    <keywords>cordova,rudderstack,analytics,appcenter</keywords>
+    <repo>https://github.com/rudderlabs/rudder-sdk-cordova.git</repo>
+    <js-module name="RudderAppCenterFactory" src="www/RudderAppCenterFactory.js">
+        <clobbers target="RudderAppCenterFactory" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="RudderAppCenterFactoryCordova">
+                <param name="android-package" value="com.rudderstack.analytics.cordova.factories.RudderAppCenterFactoryCordova"/>
+                <param name="onload" value="true"/>
+            </feature>
+            <preference name="AndroidXEnabled" value="true" />
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        </config-file>
+        <framework src="com.rudderstack.android.integration:appcenter:1.0.1"/>
+        <source-file src="src/android/RudderAppCenterFactoryCordova.java" target-dir="src/com/rudderstack/analytics/cordova/factories"/>
+    </platform>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="RudderAppCenterFactoryCordova">
+                <param name="ios-package" value="RudderAppCenterFactoryCordova" />
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+        <podspec>
+            <config>
+                <source url="https://cdn.cocoapods.org/"/>
+            </config>
+            <pods>
+                <pod name="Rudder-AppCenter"/>
+            </pods>
+        </podspec>
+        <header-file src="src/ios/RudderAppCenterFactoryCordova.h" />
+        <source-file src="src/ios/RudderAppCenterFactoryCordova.m" />
+    </platform>
+</plugin>
