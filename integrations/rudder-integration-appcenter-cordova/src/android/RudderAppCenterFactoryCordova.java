@@ -24,14 +24,15 @@ public class RudderAppCenterFactoryCordova extends CordovaPlugin {
     ) {
         switch (action) {
             case "setup":
-                setup();
+                setup(callbackContext);
                 return true;
             default:
                 return false;
         }
     }
 
-    private void setup() {
+    private void setup(CallbackContext callbackContext) {
         RudderSDKCordovaPlugin.addFactory(AppcenterIntegrationFactory.FACTORY);
+        callbackContext.success();
     }
 }

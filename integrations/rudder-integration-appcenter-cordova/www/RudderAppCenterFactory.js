@@ -2,7 +2,7 @@ var exec = require('cordova/exec');
 
 var RudderAppCenterFactory = {};
 
-RudderAppCenterFactory.setup = () => new Promise((resolve, reject) => {
+RudderAppCenterFactory.setup = () => new Promise((resolve, _reject) => {
     exec(() => {
         console.log("Added AppCenter Device Mode Succesfully");
         resolve();

@@ -2,7 +2,7 @@ var exec = require('cordova/exec');
 
 var RudderClient = {};
 
-RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, reject) => {
+RudderClient.initialize = (writeKey, config, options) => new Promise(async (resolve, reject) => {
     if (!isValidString(writeKey)) {
         console.log('WriteKey is Invalid, Aborting SDK Initialization');
         throw new Error('WriteKey is Invalid, Aborting SDK Initialization');
@@ -23,9 +23,9 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
     params[1] = config;
     params[2] = options;
 
-    initializeFactories(config);
-
     console.log("Initializing Rudder Cordova SDK");
+
+    await initializeFactories(config);
 
     exec(() => {
         console.log("Initialized Rudder Cordova SDK Succesfully");
@@ -37,7 +37,7 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
     }, 'RudderSDKCordovaPlugin', 'initialize', params);
 });
 
-RudderClient.identify = function (userId, traits, options) {
+RudderClient.identify = (userId, traits, options) => {
     if (!isValidString(userId)) {
         console.log("userId is Invalid, dropping identify call");
         return;
@@ -61,7 +61,7 @@ RudderClient.identify = function (userId, traits, options) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'identify', params);
 };
 
-RudderClient.group = function (groupId, groupTraits, options) {
+RudderClient.group = (groupId, groupTraits, options) => {
     if (!isValidString(groupId)) {
         console.log("groupId is Invalid, dropping group call");
         return;
@@ -85,7 +85,7 @@ RudderClient.group = function (groupId, groupTraits, options) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'group', params);
 };
 
-RudderClient.track = function (eventName, properties, options) {
+RudderClient.track = (eventName, properties, options) => {
     if (!isValidString(eventName)) {
         console.log("eventName is Invalid, dropping track call");
         return;
@@ -109,7 +109,7 @@ RudderClient.track = function (eventName, properties, options) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'track', params);
 };
 
-RudderClient.screen = function (screenName, properties, options) {
+RudderClient.screen = (screenName, properties, options) => {
     if (!isValidString(screenName)) {
         console.log("screenName is Invalid, dropping screen call");
         return;
@@ -133,7 +133,7 @@ RudderClient.screen = function (screenName, properties, options) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'screen', params);
 };
 
-RudderClient.alias = function (newId, options) {
+RudderClient.alias = (newId, options) => {
     if (!isValidString(newId)) {
         console.log("newId is Invalid, dropping alias call");
         return;
@@ -151,17 +151,17 @@ RudderClient.alias = function (newId, options) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'alias', params);
 };
 
-RudderClient.reset = function () {
+RudderClient.reset = () => {
     exec(null, null, 'RudderSDKCordovaPlugin', 'reset', []);
 };
 
-RudderClient.flush = function () {
+RudderClient.flush = () => {
     exec(null, null, 'RudderSDKCordovaPlugin', 'flush', []);
 };
 
 
 
-RudderClient.putDeviceToken = function (deviceToken) {
+RudderClient.putDeviceToken = (deviceToken) => {
     if (!isValidString(deviceToken)) {
         console.log("deviceToken is Invalid, dropping putDeviceToken call");
         return;
@@ -173,7 +173,7 @@ RudderClient.putDeviceToken = function (deviceToken) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'putDeviceToken', params);
 }
 
-RudderClient.setAdvertisingId = function (advertisingId) {
+RudderClient.setAdvertisingId = (advertisingId) => {
     if (!isValidString(advertisingId)) {
         console.log("advertisingId is Invalid, dropping setAdvertisingId call");
         return;
@@ -185,7 +185,7 @@ RudderClient.setAdvertisingId = function (advertisingId) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'setAdvertisingId', params);
 }
 
-RudderClient.setAnonymousId = function (anonymousId) {
+RudderClient.setAnonymousId = (anonymousId) => {
     if (!isValidString(anonymousId)) {
         console.log("anonymousId is Invalid, dropping setAnonymousId call");
         return;
@@ -206,21 +206,23 @@ RudderClient.LogLevel = {
     NONE: 0
 }
 
-const initializeFactories = function (config) {
-    if (config && config.factories && Array.isArray(config.factories)) {
-        try {
-            config.factories.forEach(factory => factory.setup());
+const initializeFactories = (config) => {
+    if (config && config.factories) {
+        if (Array.isArray(config.factories)) {
+            try {
+                config.factories.forEach(async (factory) => { await factory.setup() });
+            }
+            catch (err) {
+                console.log(err);
+            }
         }
-        catch (err) {
-            document.getElementById("demo").innerHTML = err.message;
+        else {
+            console.log("Unable to initialize factories, as an invalid value is passed")
         }
-    }
-    else {
-      console.log("Unable to initialize factories, as an invalid value is passed")
     }
 }
 
-const isValidString = function (value) {
+const isValidString = (value) => {
     if (typeof value === "undefined")
         return false;
     if (value === "")
@@ -229,7 +231,7 @@ const isValidString = function (value) {
 }
 
 
-const isOptions = function (value) {
+const isOptions = (value) => {
     if (value && (value.integrations || value.externalIds)) {
         return true;
     }
