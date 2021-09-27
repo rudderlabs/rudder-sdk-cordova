@@ -2,16 +2,23 @@
 #import "Utils.h"
 #import <Cordova/CDV.h>
 
+<<<<<<< Updated upstream
+=======
+static NSMutableArray* factories;
+static NSNotification* _notification;
+>>>>>>> Stashed changes
 
 @implementation RudderSDKCordovaPlugin : CDVPlugin
 
 - (void)pluginInitialize
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:UIApplication.sharedApplication];
+
 }
 
 - (void)finishLaunching:(NSNotification *)notification
 {
+    _notification = notification;
 }
 
 - (void)initialize:(CDVInvokedUrlCommand*)command
@@ -29,6 +36,10 @@
         else
         {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+            if(_notification!= nil)
+            {
+                [[RSClient sharedInstance] trackLifecycleEvents:_notification.userInfo];
+            }
         }
         
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

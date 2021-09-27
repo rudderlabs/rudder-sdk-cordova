@@ -28,7 +28,6 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
 
     exec(() => {
         console.log("Initialized Rudder Cordova SDK Succesfully");
-        RudderClient.track("Application Opened");
         resolve();
     }, (message) => {
         console.log(message);
