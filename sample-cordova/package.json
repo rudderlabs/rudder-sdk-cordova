@@ -22,12 +22,8 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-<<<<<<< Updated upstream
-      "rudder-sdk-cordova": {}
-=======
       "rudder-sdk-cordova": {},
       "rudder-integration-appcenter-cordova": {}
->>>>>>> Stashed changes
     },
     "platforms": [
       "android",

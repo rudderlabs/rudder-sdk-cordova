@@ -2,11 +2,8 @@
 #import "Utils.h"
 #import <Cordova/CDV.h>
 
-<<<<<<< Updated upstream
-=======
 static NSMutableArray* factories;
 static NSNotification* _notification;
->>>>>>> Stashed changes
 
 @implementation RudderSDKCordovaPlugin : CDVPlugin
 

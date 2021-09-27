@@ -29,12 +29,9 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
     private RudderConfig rudderConfig = null;
     private int noOfActivities;
     protected ExecutorService executor = null;
-<<<<<<< Updated upstream
-=======
     static List<RudderIntegration.Factory> factories = new ArrayList<>();
     private List<Runnable> runnableTasks = new ArrayList<>();
     private boolean execServiceStarted = false;
->>>>>>> Stashed changes
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -237,8 +234,6 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
         executor.execute(
                 () -> RudderClient.setAnonymousId(Utils.optArgString(args, 0)));
     }
-<<<<<<< Updated upstream
-=======
 
     public static void addFactory(RudderIntegration.Factory factory) {
         factories.add(factory);
@@ -278,5 +273,4 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
         }
         executor.execute(runnableTask);
     }
->>>>>>> Stashed changes
 }
