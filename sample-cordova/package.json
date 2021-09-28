@@ -22,8 +22,7 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "rudder-sdk-cordova": {},
-      "rudder-integration-appcenter-cordova": {}
+      "rudder-sdk-cordova": {}
     },
     "platforms": [
       "android",
