@@ -9,6 +9,7 @@ static NSMutableArray* factories;
 - (void)pluginInitialize
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    factories = [[NSMutableArray alloc] init];
 }
 
 - (void)finishLaunching:(NSNotification *)notification
@@ -178,9 +179,6 @@ static NSMutableArray* factories;
 
 + (void) addFactory:(id<RSIntegrationFactory>) factory 
 {
-    if (factories == nil) {
-        factories = [[NSMutableArray alloc] init];
-    }
     [factories addObject:factory];
 }
 
