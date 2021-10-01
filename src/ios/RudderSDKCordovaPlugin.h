@@ -15,5 +15,6 @@
 - (void)putDeviceToken:(CDVInvokedUrlCommand*)command;
 - (void)setAdvertisingId:(CDVInvokedUrlCommand*)command;
 - (void)setAnonymousId:(CDVInvokedUrlCommand*)command;
+- (void)optOut:(CDVInvokedUrlCommand*)command;
 
 @end

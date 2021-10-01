@@ -68,6 +68,9 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             case "setAnonymousId":
                 setAnonymousId(args);
                 return true;
+            case "optOut":
+                optOut(args);
+                return true;
             default:
                 return false;
         }
@@ -218,5 +221,15 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
 
         executor.execute(
                 () -> RudderClient.setAnonymousId(Utils.optArgString(args, 0)));
+    }
+
+    private void optOut(JSONArray args) {
+        if (rudderClient == null) {
+            RudderLogger.logWarn("Dropping the optOut call as SDK is not initialized yet");
+            return;
+        }
+        executor.execute(
+                () -> rudderClient.optOut(args.optBoolean(0))
+        );
     }
 }

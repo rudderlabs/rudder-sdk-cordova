@@ -175,4 +175,17 @@
     [RSClient setAnonymousId:anonymousId];
 }
 
+- (void)optOut:(CDVInvokedUrlCommand*)command
+{
+    if ([RSClient sharedInstance] == nil)
+    {
+        [RSLogger logWarn:@"Dropping the optOut call as SDK is not initialized yet"];
+        return;
+    }
+    [self.commandDelegate runInBackground:^{
+        BOOL optOut = [[command.arguments objectAtIndex:0] boolValue];
+        [[RSClient sharedInstance] optOut:optOut];
+    }];
+}
+
 @end
