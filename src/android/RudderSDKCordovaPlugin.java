@@ -3,8 +3,6 @@ package com.rudderstack.analytics.cordova;
 import com.rudderstack.android.sdk.core.RudderClient;
 import com.rudderstack.android.sdk.core.RudderConfig;
 import com.rudderstack.android.sdk.core.RudderIntegration;
-import com.rudderstack.android.sdk.core.RudderMessage;
-import com.rudderstack.android.sdk.core.RudderMessageBuilder;
 import com.rudderstack.android.sdk.core.RudderOption;
 import com.rudderstack.android.sdk.core.RudderProperty;
 import com.rudderstack.android.sdk.core.RudderTraits;
@@ -17,6 +15,8 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,7 +26,7 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
     private RudderConfig rudderConfig = null;
     private int noOfActivities;
     protected ExecutorService executor = null;
-    static List<RudderIntegration.Factory> factories = new ArrayList<>();
+
     private List<Runnable> runnableTasks = new ArrayList<>();
     private boolean execServiceStarted = false;
 
@@ -230,10 +230,6 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
 
         executor.execute(
                 () -> RudderClient.setAnonymousId(Utils.optArgString(args, 0)));
-    }
-
-    public static void addFactory(RudderIntegration.Factory factory) {
-        factories.add(factory);
     }
 
     @Override
