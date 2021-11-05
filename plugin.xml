@@ -41,7 +41,7 @@
                 <source url="https://cdn.cocoapods.org/"/>
             </config>
             <pods>
-                <pod name="Rudder" spec="~> 1.0.24" />
+                <pod name="Rudder" spec="~> 1.1.2" />
             </pods>
         </podspec>
         <header-file src="src/ios/RudderSDKCordovaPlugin.h" />
