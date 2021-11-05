@@ -1,14 +1,16 @@
-# What is Rudder?
+# What is RudderStack?
 
-**Short answer:**
-Rudder is an open-source Segment alternative written in Go, built for the enterprise.
+[**RudderStack**](https://rudderstack.com/) is a **customer data platform for developers**. Our tooling makes it easy to deploy pipelines that collect customer data from every app, website and SaaS platform, then activate it in your warehouse and business tools.
 
-**Long answer:**
-Rudder is a platform for collecting, storing and routing customer event data to dozens of tools. Rudder is open-source, can run in your cloud environment (AWS, GCP, Azure or even your data-centre) and provides a powerful transformation framework to process your event data on the fly.
+More information on RudderStack can be found [**here**](https://github.com/rudderlabs/rudder-server).
 
-Released under [MIT License](https://opensource.org/licenses/MIT)
+## What is the RudderStack Cordova SDK?
 
-## Getting Started with Cordova SDK
+[**Apache Cordova**](https://cordova.apache.org/) is an open-source, cross-platform application development framework. The RudderStack Cordova SDK lets you track event data from your Cordova app and send it to your preferred destination platforms via RudderStack.
+
+> For detailed documentation on the Cordova SDK, click [**here**](https://docs.rudderstack.com/stream-sources/rudderstack-sdk-integration-guides/rudderstack-cordova-sdk). 
+
+## Getting started
 
 To add the SDK as a dependency navigate to the root folder of your application and run the following command:
 
@@ -27,7 +29,7 @@ RudderClient.initialize( <WRITE_KEY> , {
 })
  ```
 
-## Send Events
+## Send events
 An example `track` call is as below
 ```javascript
     RudderClient.track("test_track_event", {
@@ -63,5 +65,5 @@ An example of setting the `device-token` is as shown:
 RudderClient.putDeviceToken("sampleDeviceToken");
 ```
 
-## Contact Us
-If you come across any issues while configuring or using RudderStack, please feel free to [contact us](https://rudderstack.com/contact/) or start a conversation on our [Slack](https://resources.rudderstack.com/join-rudderstack-slack) channel. We will be happy to help you.
+## Contact us
+If you come across any issues while configuring or using RudderStack, please feel free to [**contact us**](https://rudderstack.com/contact/) or start a conversation on our [**Slack**](https://resources.rudderstack.com/join-rudderstack-slack) channel. We will be happy to help you.
