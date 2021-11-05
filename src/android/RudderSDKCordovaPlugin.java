@@ -2,6 +2,7 @@ package com.rudderstack.analytics.cordova;
 
 import com.rudderstack.android.sdk.core.RudderClient;
 import com.rudderstack.android.sdk.core.RudderConfig;
+import com.rudderstack.android.sdk.core.RudderIntegration;
 import com.rudderstack.android.sdk.core.RudderOption;
 import com.rudderstack.android.sdk.core.RudderProperty;
 import com.rudderstack.android.sdk.core.RudderTraits;
@@ -14,13 +15,20 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RudderSDKCordovaPlugin extends CordovaPlugin {
 
     private RudderClient rudderClient = null;
+    private RudderConfig rudderConfig = null;
+    private int noOfActivities;
     protected ExecutorService executor = null;
+
+    private List<Runnable> runnableTasks = new ArrayList<>();
+    private boolean execServiceStarted = false;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -83,16 +91,20 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
                 .execute(
                         () -> {
                             String writeKey = Utils.optArgString(args, 0);
-                            RudderConfig config = Utils.getRudderConfig(args.optJSONObject(1));
+                            rudderConfig = Utils.getRudderConfig(args.optJSONObject(1));
                             RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
                             rudderClient =
                                     RudderClient.getInstance(
                                             cordova.getActivity(),
                                             writeKey,
-                                            config,
+                                            rudderConfig,
                                             options
                                     );
                             if (RudderClient.getInstance() != null) {
+                                for (Runnable runnableTask : runnableTasks) {
+                                    executor.execute(runnableTask);
+                                }
+                                execServiceStarted = true;
                                 callbackContext.success();
                                 return;
                             }
@@ -223,6 +235,42 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
                 () -> RudderClient.setAnonymousId(Utils.optArgString(args, 0)));
     }
 
+
+    @Override
+    public void onStart() {
+        Runnable runnableTask = () -> {
+            if (rudderConfig.isTrackLifecycleEvents()) {
+                noOfActivities += 1;
+                if (noOfActivities == 1) {
+                    // no previous activity present. Application Opened
+                    rudderClient.track("Application Opened");
+                }
+            }
+        };
+        if (rudderClient == null && !execServiceStarted) {
+            runnableTasks.add(runnableTask);
+            return;
+        }
+        executor.execute(runnableTask);
+    }
+
+    @Override
+    public void onStop() {
+        Runnable runnableTask = () -> {
+            if (rudderConfig.isTrackLifecycleEvents()) {
+                noOfActivities -= 1;
+                if (noOfActivities == 0) {
+                    rudderClient.track("Application Backgrounded");
+                }
+            }
+        };
+        if (rudderClient == null && !execServiceStarted) {
+            runnableTasks.add(runnableTask);
+            return;
+        }
+        executor.execute(runnableTask);
+    }
+
     private void optOut(JSONArray args) {
         if (rudderClient == null) {
             RudderLogger.logWarn("Dropping the optOut call as SDK is not initialized yet");
@@ -231,5 +279,5 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
         executor.execute(
                 () -> rudderClient.optOut(args.optBoolean(0))
         );
-    }
+     }
 }
