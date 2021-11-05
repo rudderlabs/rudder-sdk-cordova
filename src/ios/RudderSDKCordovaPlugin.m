@@ -2,16 +2,19 @@
 #import "Utils.h"
 #import <Cordova/CDV.h>
 
+static NSNotification* _notification;
 
 @implementation RudderSDKCordovaPlugin : CDVPlugin
 
 - (void)pluginInitialize
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:UIApplication.sharedApplication];
+
 }
 
 - (void)finishLaunching:(NSNotification *)notification
 {
+    _notification = notification;
 }
 
 - (void)initialize:(CDVInvokedUrlCommand*)command
@@ -29,6 +32,10 @@
         else
         {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+            if(_notification!= nil)
+            {
+                [[RSClient sharedInstance] trackLifecycleEvents:_notification.userInfo];
+            }
         }
         
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -173,6 +180,19 @@
 {
     NSString* anonymousId = [command.arguments objectAtIndex:0];
     [RSClient setAnonymousId:anonymousId];
+}
+
+- (void)optOut:(CDVInvokedUrlCommand*)command
+{
+    if ([RSClient sharedInstance] == nil)
+    {
+        [RSLogger logWarn:@"Dropping the optOut call as SDK is not initialized yet"];
+        return;
+    }
+    [self.commandDelegate runInBackground:^{
+        BOOL optOut = [[command.arguments objectAtIndex:0] boolValue];
+        [[RSClient sharedInstance] optOut:optOut];
+    }];
 }
 
 @end
