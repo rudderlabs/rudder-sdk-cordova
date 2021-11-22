@@ -150,15 +150,10 @@ static NSNotification* _notification;
 
 - (void)putDeviceToken:(CDVInvokedUrlCommand*)command
 {
-    if ([RSClient sharedInstance] == nil)
-    {
-        [RSLogger logWarn:@"Dropping the putDeviceToken call as SDK is not initialized yet"];
-        return;
-    }
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                   ^{
         NSString* deviceToken = [Utils getStringFromArguments:command.arguments atIndex:0];
-        [[[RSClient sharedInstance] getContext] putDeviceToken:deviceToken];
+        [RSClient putDeviceToken:deviceToken];
     });
 }
 

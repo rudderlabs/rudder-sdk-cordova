@@ -215,12 +215,8 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
 
 
     private void putDeviceToken(JSONArray args) {
-        if (rudderClient == null) {
-            RudderLogger.logWarn("Dropping the putDeviceToken call as SDK is not initialized yet");
-            return;
-        }
         executor.execute(
-                () -> rudderClient.putDeviceToken(Utils.optArgString(args, 0))
+                () -> RudderClient.putDeviceToken(Utils.optArgString(args, 0))
         );
     }
 
