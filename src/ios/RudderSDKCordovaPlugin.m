@@ -157,11 +157,11 @@ static NSNotification* _notification;
     });
 }
 
-- (void)setAdvertisingId:(CDVInvokedUrlCommand*)command
+- (void)putAdvertisingId:(CDVInvokedUrlCommand*)command
 {
     if ([RSClient sharedInstance] == nil)
     {
-        [RSLogger logWarn:@"Dropping the setAdvertisingId call as SDK is not initialized yet"];
+        [RSLogger logWarn:@"Dropping the putAdvertisingId call as SDK is not initialized yet"];
         return;
     }
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
@@ -171,10 +171,10 @@ static NSNotification* _notification;
     });
 }
 
-- (void)setAnonymousId:(CDVInvokedUrlCommand*)command
+- (void)putAnonymousId:(CDVInvokedUrlCommand*)command
 {
     NSString* anonymousId = [command.arguments objectAtIndex:0];
-    [RSClient setAnonymousId:anonymousId];
+    [RSClient putAnonymousId:anonymousId];
 }
 
 - (void)optOut:(CDVInvokedUrlCommand*)command

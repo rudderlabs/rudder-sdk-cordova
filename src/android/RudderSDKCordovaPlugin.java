@@ -70,11 +70,11 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             case "putDeviceToken":
                 putDeviceToken(args);
                 return true;
-            case "setAdvertisingId":
-                setAdvertisingId(args);
+            case "putAdvertisingId":
+                putAdvertisingId(args);
                 return true;
-            case "setAnonymousId":
-                setAnonymousId(args);
+            case "putAnonymousId":
+                putAnonymousId(args);
                 return true;
             case "optOut":
                 optOut(args);
@@ -220,15 +220,15 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
         );
     }
 
-    private void setAdvertisingId(JSONArray args) {
+    private void putAdvertisingId(JSONArray args) {
         executor.execute(
-                () -> RudderClient.updateWithAdvertisingId(Utils.optArgString(args, 0)));
+                () -> RudderClient.putAdvertisingId(Utils.optArgString(args, 0)));
     }
 
-    private void setAnonymousId(JSONArray args) {
+    private void putAnonymousId(JSONArray args) {
 
         executor.execute(
-                () -> RudderClient.setAnonymousId(Utils.optArgString(args, 0)));
+                () -> RudderClient.putAnonymousId(Utils.optArgString(args, 0)));
     }
 
 
