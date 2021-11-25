@@ -168,6 +168,11 @@ RudderClient.putDeviceToken = function (deviceToken) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'putDeviceToken', params);
 }
 
+/** @deprecated use {@link RudderClient.putAdvertisingId} instead */
+RudderClient.setAdvertisingId = function(advertisingId) {
+    this.putAdvertisingId(advertisingId);
+}
+
 RudderClient.putAdvertisingId = function (advertisingId) {
     if (!isValidString(advertisingId)) {
         console.log("advertisingId is Invalid, dropping putAdvertisingId call");
@@ -178,6 +183,11 @@ RudderClient.putAdvertisingId = function (advertisingId) {
     params[0] = advertisingId;
 
     exec(null, null, 'RudderSDKCordovaPlugin', 'putAdvertisingId', params);
+}
+
+/** @deprecated use {@link RudderClient.putAnonymousId} instead */
+RudderClient.setAnonymousId = function(anonymousId) {
+    this.putAnonymousId(anonymousId);
 }
 
 RudderClient.putAnonymousId = function (anonymousId) {
