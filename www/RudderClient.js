@@ -168,28 +168,38 @@ RudderClient.putDeviceToken = function (deviceToken) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'putDeviceToken', params);
 }
 
-RudderClient.setAdvertisingId = function (advertisingId) {
+/** @deprecated use {@link RudderClient.putAdvertisingId} instead */
+RudderClient.setAdvertisingId = function(advertisingId) {
+    this.putAdvertisingId(advertisingId);
+}
+
+RudderClient.putAdvertisingId = function (advertisingId) {
     if (!isValidString(advertisingId)) {
-        console.log("advertisingId is Invalid, dropping setAdvertisingId call");
+        console.log("advertisingId is Invalid, dropping putAdvertisingId call");
         return;
     }
 
     var params = [];
     params[0] = advertisingId;
 
-    exec(null, null, 'RudderSDKCordovaPlugin', 'setAdvertisingId', params);
+    exec(null, null, 'RudderSDKCordovaPlugin', 'putAdvertisingId', params);
 }
 
-RudderClient.setAnonymousId = function (anonymousId) {
+/** @deprecated use {@link RudderClient.putAnonymousId} instead */
+RudderClient.setAnonymousId = function(anonymousId) {
+    this.putAnonymousId(anonymousId);
+}
+
+RudderClient.putAnonymousId = function (anonymousId) {
     if (!isValidString(anonymousId)) {
-        console.log("anonymousId is Invalid, dropping setAnonymousId call");
+        console.log("anonymousId is Invalid, dropping putAnonymousId call");
         return;
     }
 
     var params = [];
     params[0] = anonymousId;
 
-    exec(null, null, 'RudderSDKCordovaPlugin', 'setAnonymousId', params);
+    exec(null, null, 'RudderSDKCordovaPlugin', 'putAnonymousId', params);
 }
 
 RudderClient.optOut = function (optOut) {
