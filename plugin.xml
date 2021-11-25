@@ -2,7 +2,7 @@
 <plugin
     xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="rudder-sdk-cordova" version="1.1.0">
+    id="rudder-sdk-cordova" version="1.0.1">
     <name>RudderStack's Cordova SDK</name>
     <description>Repo for RudderStack's Cordova SDK - which allows you to track and send your event data from your Cordova apps to your desired destination platforms via RudderStack</description>
     <license>MIT License</license>
@@ -25,7 +25,7 @@
             <uses-permission android:name="android.permission.INTERNET" />
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
         </config-file>
-        <framework src="com.rudderstack.android.sdk:core:1.2+"/>
+        <framework src="com.rudderstack.android.sdk:core:[1.2.1, )"/>
         <source-file src="src/android/RudderSDKCordovaPlugin.java" target-dir="src/com/rudderstack/analytics/cordova"/>
         <source-file src="src/android/Utils.java" target-dir="src/com/rudderstack/analytics/cordova"/>
     </platform>
@@ -41,7 +41,7 @@
                 <source url="https://cdn.cocoapods.org/"/>
             </config>
             <pods>
-                <pod name="Rudder" spec="~> 1.2.0" />
+                <pod name="Rudder" spec="~> 1.2.1" />
             </pods>
         </podspec>
         <header-file src="src/ios/RudderSDKCordovaPlugin.h" />

@@ -1,6 +1,10 @@
 {
   "name": "rudder-sdk-cordova",
+<<<<<<< HEAD
   "version": "1.1.0",
+=======
+  "version": "1.0.1",
+>>>>>>> 2ad4d1d0d2dd16be953db212c8eae2164bdb4a69
   "description": "RudderStack's Cordova SDK - which allows you to track and send your event data from your Cordova apps to your desired destination platforms via RudderStack",
   "repository": {
     "type": "git",
@@ -34,7 +38,7 @@
           "cordova-android": ">8.0.0",
           "cordova-ios": ">5.0.0"
         },
-        "1.1.0": { 
+        "1.0.1": { 
           "cordova-android": ">8.0.0",
           "cordova-ios": ">5.0.0"
         }
