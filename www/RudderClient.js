@@ -29,7 +29,6 @@ RudderClient.initialize = (writeKey, config, options) => new Promise(async (reso
 
     exec(() => {
         console.log("Initialized Rudder Cordova SDK Succesfully");
-        RudderClient.track("Application Opened");
         resolve();
     }, (message) => {
         console.log(message);
@@ -159,8 +158,6 @@ RudderClient.flush = () => {
     exec(null, null, 'RudderSDKCordovaPlugin', 'flush', []);
 };
 
-
-
 RudderClient.putDeviceToken = (deviceToken) => {
     if (!isValidString(deviceToken)) {
         console.log("deviceToken is Invalid, dropping putDeviceToken call");
@@ -173,28 +170,51 @@ RudderClient.putDeviceToken = (deviceToken) => {
     exec(null, null, 'RudderSDKCordovaPlugin', 'putDeviceToken', params);
 }
 
+/** @deprecated use {@link RudderClient.putAdvertisingId} instead */
 RudderClient.setAdvertisingId = (advertisingId) => {
-    if (!isValidString(advertisingId)) {
-        console.log("advertisingId is Invalid, dropping setAdvertisingId call");
+    this.putAdvertisingId(advertisingId);
+}
+
+RudderClient.putAdvertisingId = (advertisingId) => {
+  if (!isValidString(advertisingId)) {
+        console.log("advertisingId is Invalid, dropping putAdvertisingId call");
         return;
     }
 
     var params = [];
     params[0] = advertisingId;
 
-    exec(null, null, 'RudderSDKCordovaPlugin', 'setAdvertisingId', params);
+    exec(null, null, 'RudderSDKCordovaPlugin', 'putAdvertisingId', params);
 }
 
+/** @deprecated use {@link RudderClient.putAnonymousId} instead */
 RudderClient.setAnonymousId = (anonymousId) => {
+    this.putAnonymousId(anonymousId);
+}
+
+
+RudderClient.putAnonymousId = (anonymousId) => {
     if (!isValidString(anonymousId)) {
-        console.log("anonymousId is Invalid, dropping setAnonymousId call");
+        console.log("anonymousId is Invalid, dropping putAnonymousId call");
         return;
     }
 
     var params = [];
     params[0] = anonymousId;
 
-    exec(null, null, 'RudderSDKCordovaPlugin', 'setAnonymousId', params);
+    exec(null, null, 'RudderSDKCordovaPlugin', 'putAnonymousId', params);
+}
+
+RudderClient.optOut = (optOut) => {
+    if (!isValidBoolean(optOut)) {
+        console.log("newId is Invalid, dropping alias call");
+        return;
+    }
+
+    var params = [];
+    params[0] = optOut;
+
+    exec(null, null, 'RudderSDKCordovaPlugin', 'optOut', params);
 }
 
 RudderClient.LogLevel = {
@@ -236,6 +256,12 @@ const isOptions = (value) => {
         return true;
     }
     return false;
+}
+
+const isValidBoolean = (value) => {
+    if (typeof value === "undefined")
+        return false;
+    return typeof value === "boolean" || value instanceof Boolean
 }
 
 module.exports = RudderClient;

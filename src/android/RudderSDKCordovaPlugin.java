@@ -23,8 +23,13 @@ import java.util.concurrent.Executors;
 public class RudderSDKCordovaPlugin extends CordovaPlugin {
 
     private RudderClient rudderClient = null;
+    private RudderConfig rudderConfig = null;
+    private int noOfActivities;
     protected ExecutorService executor = null;
     static List<RudderIntegration.Factory> factories = new ArrayList<>();
+
+    private List<Runnable> runnableTasks = new ArrayList<>();
+    private boolean execServiceStarted = false;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -66,11 +71,14 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
             case "putDeviceToken":
                 putDeviceToken(args);
                 return true;
-            case "setAdvertisingId":
-                setAdvertisingId(args);
+            case "putAdvertisingId":
+                putAdvertisingId(args);
                 return true;
-            case "setAnonymousId":
-                setAnonymousId(args);
+            case "putAnonymousId":
+                putAnonymousId(args);
+                return true;
+            case "optOut":
+                optOut(args);
                 return true;
             default:
                 return false;
@@ -84,16 +92,20 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
                 .execute(
                         () -> {
                             String writeKey = Utils.optArgString(args, 0);
-                            RudderConfig config = Utils.getRudderConfig(args.optJSONObject(1));
+                            rudderConfig = Utils.getRudderConfig(args.optJSONObject(1));
                             RudderOption options = Utils.getRudderOption(args.optJSONObject(2));
                             rudderClient =
                                     RudderClient.getInstance(
                                             cordova.getActivity(),
                                             writeKey,
-                                            config,
+                                            rudderConfig,
                                             options
                                     );
                             if (RudderClient.getInstance() != null) {
+                                for (Runnable runnableTask : runnableTasks) {
+                                    executor.execute(runnableTask);
+                                }
+                                execServiceStarted = true;
                                 callbackContext.success();
                                 return;
                             }
@@ -204,28 +216,71 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
 
 
     private void putDeviceToken(JSONArray args) {
-        if (rudderClient == null) {
-            RudderLogger.logWarn("Dropping the putDeviceToken call as SDK is not initialized yet");
-            return;
-        }
         executor.execute(
-                () -> rudderClient.putDeviceToken(Utils.optArgString(args, 0))
+                () -> RudderClient.putDeviceToken(Utils.optArgString(args, 0))
         );
     }
 
-    private void setAdvertisingId(JSONArray args) {
+    private void putAdvertisingId(JSONArray args) {
         executor.execute(
-                () -> RudderClient.updateWithAdvertisingId(Utils.optArgString(args, 0)));
+                () -> RudderClient.putAdvertisingId(Utils.optArgString(args, 0)));
     }
 
-    private void setAnonymousId(JSONArray args) {
+    private void putAnonymousId(JSONArray args) {
 
         executor.execute(
-                () -> RudderClient.setAnonymousId(Utils.optArgString(args, 0)));
+                () -> RudderClient.putAnonymousId(Utils.optArgString(args, 0)));
+    }
+
+
+    @Override
+    public void onStart() {
+        Runnable runnableTask = () -> {
+            if (rudderConfig.isTrackLifecycleEvents()) {
+                noOfActivities += 1;
+                if (noOfActivities == 1) {
+                    // no previous activity present. Application Opened
+                    rudderClient.track("Application Opened");
+                }
+            }
+        };
+        if (rudderClient == null && !execServiceStarted) {
+            runnableTasks.add(runnableTask);
+            return;
+        }
+        executor.execute(runnableTask);
     }
 
     public static void addFactory(RudderIntegration.Factory factory)
     {
         factories.add(factory);
     }
+
+    @Override
+    public void onStop() {
+        Runnable runnableTask = () -> {
+            if (rudderConfig.isTrackLifecycleEvents()) {
+                noOfActivities -= 1;
+                if (noOfActivities == 0) {
+                    rudderClient.track("Application Backgrounded");
+                }
+            }
+        };
+        if (rudderClient == null && !execServiceStarted) {
+            runnableTasks.add(runnableTask);
+            return;
+        }
+        executor.execute(runnableTask);
+    }
+
+    private void optOut(JSONArray args) {
+        if (rudderClient == null) {
+            RudderLogger.logWarn("Dropping the optOut call as SDK is not initialized yet");
+            return;
+        }
+        executor.execute(
+                () -> rudderClient.optOut(args.optBoolean(0))
+        );
+     }
+
 }

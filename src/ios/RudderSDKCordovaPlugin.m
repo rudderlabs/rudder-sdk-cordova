@@ -3,6 +3,8 @@
 #import <Cordova/CDV.h>
 
 static NSMutableArray* factories;
+static NSNotification* _notification;
+
 
 @implementation RudderSDKCordovaPlugin : CDVPlugin
 
@@ -14,6 +16,7 @@ static NSMutableArray* factories;
 
 - (void)finishLaunching:(NSNotification *)notification
 {
+    _notification = notification;
 }
 
 - (void)initialize:(CDVInvokedUrlCommand*)command
@@ -31,6 +34,10 @@ static NSMutableArray* factories;
         else
         {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+            if(_notification!= nil)
+            {
+                [[RSClient sharedInstance] trackLifecycleEvents:_notification.userInfo];
+            }
         }
         
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -145,23 +152,18 @@ static NSMutableArray* factories;
 
 - (void)putDeviceToken:(CDVInvokedUrlCommand*)command
 {
-    if ([RSClient sharedInstance] == nil)
-    {
-        [RSLogger logWarn:@"Dropping the putDeviceToken call as SDK is not initialized yet"];
-        return;
-    }
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                   ^{
         NSString* deviceToken = [Utils getStringFromArguments:command.arguments atIndex:0];
-        [[[RSClient sharedInstance] getContext] putDeviceToken:deviceToken];
+        [RSClient putDeviceToken:deviceToken];
     });
 }
 
-- (void)setAdvertisingId:(CDVInvokedUrlCommand*)command
+- (void)putAdvertisingId:(CDVInvokedUrlCommand*)command
 {
     if ([RSClient sharedInstance] == nil)
     {
-        [RSLogger logWarn:@"Dropping the setAdvertisingId call as SDK is not initialized yet"];
+        [RSLogger logWarn:@"Dropping the putAdvertisingId call as SDK is not initialized yet"];
         return;
     }
     dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
@@ -171,10 +173,23 @@ static NSMutableArray* factories;
     });
 }
 
-- (void)setAnonymousId:(CDVInvokedUrlCommand*)command
+- (void)putAnonymousId:(CDVInvokedUrlCommand*)command
 {
     NSString* anonymousId = [command.arguments objectAtIndex:0];
-    [RSClient setAnonymousId:anonymousId];
+    [RSClient putAnonymousId:anonymousId];
+}
+
+- (void)optOut:(CDVInvokedUrlCommand*)command
+{
+    if ([RSClient sharedInstance] == nil)
+    {
+        [RSLogger logWarn:@"Dropping the optOut call as SDK is not initialized yet"];
+        return;
+    }
+    [self.commandDelegate runInBackground:^{
+        BOOL optOut = [[command.arguments objectAtIndex:0] boolValue];
+        [[RSClient sharedInstance] optOut:optOut];
+    }];
 }
 
 + (void) addFactory:(id<RSIntegrationFactory>) factory 
