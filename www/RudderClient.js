@@ -172,7 +172,7 @@ RudderClient.putDeviceToken = (deviceToken) => {
 
 /** @deprecated use {@link RudderClient.putAdvertisingId} instead */
 RudderClient.setAdvertisingId = (advertisingId) => {
-    this.putAdvertisingId(advertisingId);
+    RudderClient.putAdvertisingId(advertisingId);
 }
 
 RudderClient.putAdvertisingId = (advertisingId) => {
@@ -189,7 +189,7 @@ RudderClient.putAdvertisingId = (advertisingId) => {
 
 /** @deprecated use {@link RudderClient.putAnonymousId} instead */
 RudderClient.setAnonymousId = (anonymousId) => {
-    this.putAnonymousId(anonymousId);
+    RudderClient.putAnonymousId(anonymousId);
 }
 
 
