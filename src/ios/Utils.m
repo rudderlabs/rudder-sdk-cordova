@@ -1,4 +1,6 @@
 #import "Utils.h"
+#import "RudderSDKCordovaPlugin.h"
+#import <Rudder/Rudder.h>
 
 @implementation Utils
 
@@ -68,6 +70,14 @@
     if(configDict[@"controlPlaneUrl"] && [self getString:configDict[@"controlPlaneUrl"]] != nil)
     {
         [configBuilder withControlPlaneUrl:[self getString:configDict[@"controlPlaneUrl"]]];
+    }
+    NSMutableArray* factories = [RudderSDKCordovaPlugin getFactories];
+    if(factories != nil && [factories count]!=0)
+    {
+        for( id<RSIntegrationFactory> factory in factories )
+        {
+            [configBuilder withFactory:factory];
+        }
     }
     return [configBuilder build];
 }

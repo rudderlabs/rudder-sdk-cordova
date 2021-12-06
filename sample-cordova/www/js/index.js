@@ -30,15 +30,16 @@ document.getElementById("track").onclick = function () {
 async function onDeviceReady() {
     // Cordova is now initialized. Have fun!
     RudderClient.setAnonymousId("SampleAnonId");
-    await RudderClient.initialize("1n0JdVPZTRUIkLXYccrWzZwdGSx", {
-        "dataPlaneUrl": "https://22d3-175-101-36-4.ngrok.io",
+    await RudderClient.initialize("1pTxG1Tqxr7FCrqIy7j0p28AENV", {
+        "dataPlaneUrl": "https://3b3c-61-95-158-116.ngrok.io",
         "flushQueueSize": 30,
         "dbCountThreshold": 10000,
         "configRefreshInterval": 2,
         "logLevel": RudderClient.LogLevel.VERBOSE,
         "sleepTimeOut": 10,
         "trackLifecycleEvents": true,
-        "controlPlaneUrl": "https://api.rudderstack.com"
+        "controlPlaneUrl": "https://api.rudderstack.com",
+        "factories": [RudderAppCenterFactory]
     }, {
         "integrations": {
             "MixPanel": true,
@@ -102,9 +103,9 @@ async function onDeviceReady() {
                 category: 'Games'
             }
         ]
-    }, { "integrations": { "All": false, "Amplitude": true } })
-    RudderClient.screen("Home Screen", { "mobile": "pixel" }, { "integrations": { "All": false, "Amplitude": true } })
-    RudderClient.alias("tempUserId", { "integrations": { "All": false, "Amplitude": true } })
+    }, { "integrations": { "All": true, "Amplitude": true } })
+    RudderClient.screen("Home Screen", { "mobile": "pixel" }, { "integrations": { "All": true, "Amplitude": true } })
+    RudderClient.alias("tempUserId", { "integrations": { "All": true, "Amplitude": true } })
     RudderClient.reset()
     RudderClient.flush()
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);

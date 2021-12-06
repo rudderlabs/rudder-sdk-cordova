@@ -2,14 +2,16 @@
 #import "Utils.h"
 #import <Cordova/CDV.h>
 
+static NSMutableArray* factories;
 static NSNotification* _notification;
+
 
 @implementation RudderSDKCordovaPlugin : CDVPlugin
 
 - (void)pluginInitialize
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:UIApplication.sharedApplication];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishLaunching:) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    factories = [[NSMutableArray alloc] init];
 }
 
 - (void)finishLaunching:(NSNotification *)notification
@@ -188,6 +190,15 @@ static NSNotification* _notification;
         BOOL optOut = [[command.arguments objectAtIndex:0] boolValue];
         [[RSClient sharedInstance] optOut:optOut];
     }];
+}
+
++ (void) addFactory:(id<RSIntegrationFactory>) factory 
+{
+    [factories addObject:factory];
+}
+
++ (NSMutableArray*) getFactories {
+    return factories;
 }
 
 @end

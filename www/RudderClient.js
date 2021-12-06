@@ -2,7 +2,7 @@ var exec = require('cordova/exec');
 
 var RudderClient = {};
 
-RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, reject) => {
+RudderClient.initialize = (writeKey, config, options) => new Promise(async (resolve, reject) => {
     if (!isValidString(writeKey)) {
         console.log('WriteKey is Invalid, Aborting SDK Initialization');
         throw new Error('WriteKey is Invalid, Aborting SDK Initialization');
@@ -25,6 +25,8 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
 
     console.log("Initializing Rudder Cordova SDK");
 
+    await initializeFactories(config);
+
     exec(() => {
         console.log("Initialized Rudder Cordova SDK Succesfully");
         resolve();
@@ -34,7 +36,7 @@ RudderClient.initialize = (writeKey, config, options) => new Promise((resolve, r
     }, 'RudderSDKCordovaPlugin', 'initialize', params);
 });
 
-RudderClient.identify = function (userId, traits, options) {
+RudderClient.identify = (userId, traits, options) => {
     if (!isValidString(userId)) {
         console.log("userId is Invalid, dropping identify call");
         return;
@@ -58,7 +60,7 @@ RudderClient.identify = function (userId, traits, options) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'identify', params);
 };
 
-RudderClient.group = function (groupId, groupTraits, options) {
+RudderClient.group = (groupId, groupTraits, options) => {
     if (!isValidString(groupId)) {
         console.log("groupId is Invalid, dropping group call");
         return;
@@ -82,7 +84,7 @@ RudderClient.group = function (groupId, groupTraits, options) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'group', params);
 };
 
-RudderClient.track = function (eventName, properties, options) {
+RudderClient.track = (eventName, properties, options) => {
     if (!isValidString(eventName)) {
         console.log("eventName is Invalid, dropping track call");
         return;
@@ -106,7 +108,7 @@ RudderClient.track = function (eventName, properties, options) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'track', params);
 };
 
-RudderClient.screen = function (screenName, properties, options) {
+RudderClient.screen = (screenName, properties, options) => {
     if (!isValidString(screenName)) {
         console.log("screenName is Invalid, dropping screen call");
         return;
@@ -130,7 +132,7 @@ RudderClient.screen = function (screenName, properties, options) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'screen', params);
 };
 
-RudderClient.alias = function (newId, options) {
+RudderClient.alias = (newId, options) => {
     if (!isValidString(newId)) {
         console.log("newId is Invalid, dropping alias call");
         return;
@@ -148,15 +150,15 @@ RudderClient.alias = function (newId, options) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'alias', params);
 };
 
-RudderClient.reset = function () {
+RudderClient.reset = () => {
     exec(null, null, 'RudderSDKCordovaPlugin', 'reset', []);
 };
 
-RudderClient.flush = function () {
+RudderClient.flush = () => {
     exec(null, null, 'RudderSDKCordovaPlugin', 'flush', []);
 };
 
-RudderClient.putDeviceToken = function (deviceToken) {
+RudderClient.putDeviceToken = (deviceToken) => {
     if (!isValidString(deviceToken)) {
         console.log("deviceToken is Invalid, dropping putDeviceToken call");
         return;
@@ -169,12 +171,12 @@ RudderClient.putDeviceToken = function (deviceToken) {
 }
 
 /** @deprecated use {@link RudderClient.putAdvertisingId} instead */
-RudderClient.setAdvertisingId = function(advertisingId) {
-    this.putAdvertisingId(advertisingId);
+RudderClient.setAdvertisingId = (advertisingId) => {
+    RudderClient.putAdvertisingId(advertisingId);
 }
 
-RudderClient.putAdvertisingId = function (advertisingId) {
-    if (!isValidString(advertisingId)) {
+RudderClient.putAdvertisingId = (advertisingId) => {
+  if (!isValidString(advertisingId)) {
         console.log("advertisingId is Invalid, dropping putAdvertisingId call");
         return;
     }
@@ -186,11 +188,12 @@ RudderClient.putAdvertisingId = function (advertisingId) {
 }
 
 /** @deprecated use {@link RudderClient.putAnonymousId} instead */
-RudderClient.setAnonymousId = function(anonymousId) {
-    this.putAnonymousId(anonymousId);
+RudderClient.setAnonymousId = (anonymousId) => {
+    RudderClient.putAnonymousId(anonymousId);
 }
 
-RudderClient.putAnonymousId = function (anonymousId) {
+
+RudderClient.putAnonymousId = (anonymousId) => {
     if (!isValidString(anonymousId)) {
         console.log("anonymousId is Invalid, dropping putAnonymousId call");
         return;
@@ -202,8 +205,7 @@ RudderClient.putAnonymousId = function (anonymousId) {
     exec(null, null, 'RudderSDKCordovaPlugin', 'putAnonymousId', params);
 }
 
-RudderClient.optOut = function (optOut) {
-
+RudderClient.optOut = (optOut) => {
     if (!isValidBoolean(optOut)) {
         console.log("newId is Invalid, dropping alias call");
         return;
@@ -224,7 +226,23 @@ RudderClient.LogLevel = {
     NONE: 0
 }
 
-const isValidString = function (value) {
+const initializeFactories = (config) => {
+    if (config && config.factories) {
+        if (Array.isArray(config.factories)) {
+            try {
+                config.factories.forEach(async (factory) => { await factory.setup() });
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+        else {
+            console.log("Unable to initialize factories, as an invalid value is passed")
+        }
+    }
+}
+
+const isValidString = (value) => {
     if (typeof value === "undefined")
         return false;
     if (value === "")
@@ -232,14 +250,15 @@ const isValidString = function (value) {
     return typeof value === "string" || value instanceof String
 }
 
-const isOptions = function (value) {
+
+const isOptions = (value) => {
     if (value && (value.integrations || value.externalIds)) {
         return true;
     }
     return false;
 }
 
-const isValidBoolean = function (value) {
+const isValidBoolean = (value) => {
     if (typeof value === "undefined")
         return false;
     return typeof value === "boolean" || value instanceof Boolean

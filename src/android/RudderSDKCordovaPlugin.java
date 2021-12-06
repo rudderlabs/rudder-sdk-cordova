@@ -26,6 +26,7 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
     private RudderConfig rudderConfig = null;
     private int noOfActivities;
     protected ExecutorService executor = null;
+    static List<RudderIntegration.Factory> factories = new ArrayList<>();
 
     private List<Runnable> runnableTasks = new ArrayList<>();
     private boolean execServiceStarted = false;
@@ -250,6 +251,11 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
         executor.execute(runnableTask);
     }
 
+    public static void addFactory(RudderIntegration.Factory factory)
+    {
+        factories.add(factory);
+    }
+
     @Override
     public void onStop() {
         Runnable runnableTask = () -> {
@@ -276,4 +282,5 @@ public class RudderSDKCordovaPlugin extends CordovaPlugin {
                 () -> rudderClient.optOut(args.optBoolean(0))
         );
      }
+
 }
