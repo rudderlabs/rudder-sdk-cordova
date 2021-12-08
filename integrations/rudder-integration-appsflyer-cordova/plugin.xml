@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="rudder-integration-appsflyer-cordova" version="1.0.0">
+    <name>RudderStack's Cordova Appsflyer Device Mode Factory</name>
+    <description>RudderStack's Cordova Implementation for Appsflyer</description>
+    <license>MIT License</license>
+    <keywords>cordova,rudderstack,analytics,appsflyer</keywords>
+    <repo>https://github.com/rudderlabs/rudder-sdk-cordova.git</repo>
+    <js-module name="RudderAppsflyerFactory" src="www/RudderAppsflyerFactory.js">
+        <clobbers target="RudderAppsflyerFactory" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="RudderAppsflyerFactoryCordova">
+                <param name="android-package" value="com.rudderstack.analytics.cordova.factories.RudderAppsflyerFactoryCordova"/>
+                <param name="onload" value="true"/>
+            </feature>
+            <preference name="AndroidXEnabled" value="true" />
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        </config-file>
+        <framework src="com.rudderstack.android.integration:appsflyer:[1.0.4, )"/>
+        <framework src="com.appsflyer:af-android-sdk:6.4.3"/>
+        <framework src="com.android.installreferrer:installreferrer:2.2"/>
+        <source-file src="src/android/RudderAppsflyerFactoryCordova.java" target-dir="src/com/rudderstack/analytics/cordova/factories"/>
+    </platform>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="RudderAppsflyerFactoryCordova">
+                <param name="ios-package" value="RudderAppsflyerFactoryCordova" />
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+        <podspec>
+            <config>
+                <source url="https://cdn.cocoapods.org/"/>
+            </config>
+            <pods>
+                <pod name="Rudder-Appsflyer"/>
+            </pods>
+        </podspec>
+        <header-file src="src/ios/RudderAppsflyerFactoryCordova.h" />
+        <source-file src="src/ios/RudderAppsflyerFactoryCordova.m" />
+    </platform>
+</plugin>
