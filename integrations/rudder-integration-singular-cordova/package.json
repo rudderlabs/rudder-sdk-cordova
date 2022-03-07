@@ -1,0 +1,40 @@
+{
+    "name": "rudder-integration-singular-cordova",
+    "version": "1.0.0",
+    "description": "RudderStack's Cordova Implementation for Singular",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/rudderlabs/rudder-sdk-cordova.git"
+    },
+    "keywords": [
+      "ecosystem:cordova",
+      "cordova-android",
+      "cordova-ios",
+      "cordova",
+      "singular",
+      "rudderstack",
+      "analytics",
+      "attribution"
+    ],
+    "author": "Abhishek Pandey <abhishek@rudderstack.com>",
+    "license": "MIT",
+    "bugs": {
+      "url": "https://github.com/rudderlabs/rudder-sdk-cordova/issues"
+    },
+    "homepage": "https://github.com/rudderlabs/rudder-sdk-cordova#readme",
+    "cordova": {
+      "id": "rudder-integration-singular-cordova",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "engines": {
+      "cordovaDependencies": {
+          "1.0.0": { 
+            "=cordova-android": ">8.0.0",
+            "cordova-ios": ">5.0.0"
+          }
+      }
+    }
+}

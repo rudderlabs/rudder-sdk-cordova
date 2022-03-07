@@ -19,18 +19,24 @@
     "cordova-plugin-whitelist": "^1.3.5",
     "rudder-integration-appcenter-cordova": "file:../integrations/rudder-integration-appcenter-cordova",
     "rudder-integration-appsflyer-cordova": "file:../integrations/rudder-integration-appsflyer-cordova",
+    "rudder-integration-singular-cordova": "file:../integrations/rudder-integration-singular-cordova",
     "rudder-sdk-cordova": "file:.."
   },
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "rudder-integration-appcenter-cordova": {},
       "rudder-sdk-cordova": {},
+      "rudder-integration-singular-cordova": {},
+      "rudder-integration-appcenter-cordova": {},
       "rudder-integration-appsflyer-cordova": {}
     },
     "platforms": [
       "ios",
       "android"
     ]
+  },
+  "dependencies": {
+    "cordova": "^11.0.0",
+    "ios-deploy": "^1.11.4"
   }
 }
