@@ -1,7 +1,7 @@
 package com.rudderstack.analytics.cordova.factories;
 
 import com.rudderstack.analytics.cordova.RudderSDKCordovaPlugin;
-import com.rudderstack.android.integrations.singular.SingularIntegrationFactory;
+import com.rudderstack.android.integration.singular.SingularIntegrationFactory;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;

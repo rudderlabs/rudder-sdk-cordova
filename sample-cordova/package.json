@@ -26,13 +26,13 @@
     "plugins": {
       "cordova-plugin-whitelist": {},
       "rudder-sdk-cordova": {},
-      "rudder-integration-singular-cordova": {},
       "rudder-integration-appcenter-cordova": {},
-      "rudder-integration-appsflyer-cordova": {}
+      "rudder-integration-appsflyer-cordova": {},
+      "rudder-integration-singular-cordova": {}
     },
     "platforms": [
-      "ios",
-      "android"
+      "android",
+      "ios"
     ]
   },
   "dependencies": {
