@@ -39,7 +39,7 @@ async function onDeviceReady() {
         "sleepTimeOut": 10,
         "trackLifecycleEvents": true,
         "controlPlaneUrl": "https://api.rudderstack.com",
-        "factories": [RudderAppCenterFactory, RudderAppsflyerFactory]
+        "factories": [RudderAppCenterFactory, RudderAppsflyerFactory, RudderSingularFactory]
     }, {
         "integrations": {
             "MixPanel": true,
