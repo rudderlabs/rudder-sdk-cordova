@@ -25,10 +25,10 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
-      "rudder-sdk-cordova": {},
-      "rudder-integration-appcenter-cordova": {},
       "rudder-integration-appsflyer-cordova": {},
-      "rudder-integration-singular-cordova": {}
+      "rudder-integration-singular-cordova": {},
+      "rudder-sdk-cordova": {},
+      "rudder-integration-appcenter-cordova": {}
     },
     "platforms": [
       "android",
