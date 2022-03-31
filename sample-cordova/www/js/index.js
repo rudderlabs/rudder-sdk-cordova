@@ -27,11 +27,11 @@ document.getElementById("track").onclick = function () {
 
 }
 
-async function onDeviceReady() {
-    // Cordova is now initialized. Have fun!
+
+document.getElementById("initialize").onclick =  async function () {
     RudderClient.setAnonymousId("SampleAnonId");
     await RudderClient.initialize("1pTxG1Tqxr7FCrqIy7j0p28AENV", {
-        "dataPlaneUrl": "https://3b3c-61-95-158-116.ngrok.io",
+        "dataPlaneUrl": "https://38b5-175-101-36-4.ngrok.io",
         "flushQueueSize": 30,
         "dbCountThreshold": 10000,
         "configRefreshInterval": 2,
@@ -70,7 +70,7 @@ async function onDeviceReady() {
         }
     })
     RudderClient.putDeviceToken("SampleDeviceToken")
-    RudderClient.setAdvertisingId("SampleAdvertisingId")
+    //RudderClient.setAdvertisingId("SampleAdvertisingId")
     RudderClient.group("group1", { "groupname": "RS", "groupwork": "Mobile dev" }, { "integrations": { "All": false, "Amplitude": true } })
     RudderClient.track('Order Completed', {
         checkout_id: '12345',
@@ -108,6 +108,13 @@ async function onDeviceReady() {
     RudderClient.alias("tempUserId", { "integrations": { "All": true, "Amplitude": true } })
     RudderClient.reset()
     RudderClient.flush()
+}
+
+
+
+async function onDeviceReady() {
+    // Cordova is now initialized. Have fun!
+    
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     // RudderClient.identify();
     document.getElementById('deviceready').classList.add('ready');

@@ -49,6 +49,9 @@ public class Utils {
         if (configMap.containsKey(RudderConfigConstants.sleepTimeOut) && getInteger(configMap.get(RudderConfigConstants.sleepTimeOut)) != null) {
             configBuilder = configBuilder.withSleepCount(getInteger(configMap.get(RudderConfigConstants.sleepTimeOut)));
         }
+        if (configMap.containsKey(RudderConfigConstants.autoCollectAdvertId)) {
+            configBuilder = configBuilder.withAutoCollectAdvertId(getBoolean(configMap.get(RudderConfigConstants.autoCollectAdvertId)));
+        }
         if (configMap.containsKey(RudderConfigConstants.trackLifecycleEvents)) {
             configBuilder = configBuilder.withTrackLifecycleEvents(getBoolean(configMap.get(RudderConfigConstants.trackLifecycleEvents)));
         }
@@ -194,6 +197,7 @@ class RudderConfigConstants {
     static String logLevel = "logLevel";
     static String sleepTimeOut = "sleepTimeOut";
     static String controlPlaneUrl = "controlPlaneUrl";
+    static String autoCollectAdvertId = "autoCollectAdvertId";
     static String trackLifecycleEvents = "trackLifecycleEvents";
     // static String recordScreenViews = "recordScreenViews";
 
