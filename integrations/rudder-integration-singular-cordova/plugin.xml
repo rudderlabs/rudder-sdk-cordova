@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="rudder-integration-singular-cordova" version="1.0.0">
+    <name>RudderStack's Cordova Singular Device Mode Factory</name>
+    <description>RudderStack's Cordova Implementation for Singular</description>
+    <license>MIT License</license>
+    <keywords>cordova,rudderstack,analytics,singular</keywords>
+    <repo>https://github.com/rudderlabs/rudder-sdk-cordova.git</repo>
+    <js-module name="RudderSingularFactory" src="www/RudderSingularFactory.js">
+        <clobbers target="RudderSingularFactory" />
+    </js-module>
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="RudderSingularFactoryCordova">
+                <param name="android-package" value="com.rudderstack.analytics.cordova.factories.RudderSingularFactoryCordova"/>
+                <param name="onload" value="true"/>
+            </feature>
+            <preference name="AndroidXEnabled" value="true" />
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        </config-file>
+        <framework src="com.rudderstack.android.integration:singular:[1.0.0, )"/>
+        <framework src="plugin.gradle" custom="true" type="gradleReference"/>
+        <source-file src="src/android/RudderSingularFactoryCordova.java" target-dir="src/com/rudderstack/analytics/cordova/factories"/>
+    </platform>
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="RudderSingularFactoryCordova">
+                <param name="ios-package" value="RudderSingularFactoryCordova" />
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+        <podspec>
+            <config>
+                <source url="https://cdn.cocoapods.org/"/>
+            </config>
+            <pods>
+                <pod name="Rudder-Singular"/>
+            </pods>
+        </podspec>
+        <header-file src="src/ios/RudderSingularFactoryCordova.h" />
+        <source-file src="src/ios/RudderSingularFactoryCordova.m" />
+    </platform>
+</plugin>
