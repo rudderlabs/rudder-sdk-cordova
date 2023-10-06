@@ -40,6 +40,9 @@
     "ios-deploy": "^1.12.2"
   },
   "overrides": {
+    "gauge" : {
+      "ansi-regex": "3.0.1"
+    },
     "http-cache-semantics": "4.1.1",
     "semver": "7.5.4",
     "systeminformation": "5.21.11"
