@@ -8,8 +8,14 @@ on:
     branches: ['develop', 'master']
     types: ['opened', 'reopened', 'synchronize']
 
+permissions:
+  contents: read
+
 jobs:
   build:
+    permissions:
+      contents: read  # for actions/checkout to fetch code
+      pull-requests: read  # for SonarSource/sonarcloud-github-action to determine which PR to decorate
     name: 'Unit Tests, Coverage & Sonar'
     runs-on: ubuntu-latest
 
@@ -20,10 +26,10 @@ jobs:
           egress-policy: audit
 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: '.nvmrc'
           cache: 'npm'
@@ -35,7 +41,7 @@ jobs:
           npm ci
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarcloud-github-action@ba3875ecf642b2129de2b589510c81a8b53dbf4e # master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
