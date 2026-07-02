@@ -1,3 +1,19 @@
+> ⚠️ **DEPRECATION WARNING**
+>
+> **This SDK is deprecated and no longer actively maintained.**
+>
+> Please migrate to the **RudderStack JavaScript SDK** used inside a **Capacitor** app:
+> - **Repository**: <https://github.com/rudderlabs/rudder-sdk-js>
+> - **Documentation**: <https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/>
+>
+> Alternatives for teams doing a broader mobile rewrite:
+> - **React Native**: <https://github.com/rudderlabs/rudder-sdk-react-native>
+> - **Flutter**: <https://github.com/rudderlabs/rudder-sdk-flutter>
+>
+> This version of the SDK will be sunset soon. So, migrate to the newer SDK as soon as possible.
+
+---
+
 # What is RudderStack?
 
 [**RudderStack**](https://rudderstack.com/) is a **customer data platform for developers**. Our tooling makes it easy to deploy pipelines that collect customer data from every app, website and SaaS platform, then activate it in your warehouse and business tools.
