@@ -1,18 +1,35 @@
-> ⚠️ **DEPRECATION WARNING**
+> ⚠️ **DEPRECATED — End of Life: December 1, 2026**
 >
-> **This SDK is deprecated and no longer actively maintained.**
+> **The RudderStack Cordova SDK is no longer actively maintained and will reach end-of-life on December 1, 2026.**
 >
 > Please migrate to the **RudderStack JavaScript SDK** used inside a **Capacitor** app:
 > - **Repository**: <https://github.com/rudderlabs/rudder-sdk-js>
 > - **Documentation**: <https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/>
 >
 > Alternatives for teams doing a broader mobile rewrite:
-> - **React Native**: <https://github.com/rudderlabs/rudder-sdk-react-native>
-> - **Flutter**: <https://github.com/rudderlabs/rudder-sdk-flutter>
+> - **React Native**
+>   - Docs: https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-react-native-sdk/
+>   - GitHub: https://github.com/rudderlabs/rudder-sdk-react-native
+> - **Flutter**
+>   - Docs: https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-flutter-sdk/
+>   - GitHub: https://github.com/rudderlabs/rudder-sdk-flutter
+> - **Swift SDK** (iOS native)
+>   - Docs: https://www.rudderstack.com/docs/sources/event-streams/sdks/swift-sdk/
+>   - GitHub: https://github.com/rudderlabs/rudder-sdk-swift
+> - **Kotlin SDK** (Android native)
+>   - Docs: https://www.rudderstack.com/docs/sources/event-streams/sdks/kotlin-sdk/
+>   - GitHub: https://github.com/rudderlabs/rudder-sdk-kotlin
 >
-> This version of the SDK will be sunset soon. So, migrate to the newer SDK as soon as possible.
-
+> Existing sources and connections remain functional. No new Cordova sources can be created after this date.
 ---
+<p align="center">
+  <a href="https://rudderstack.com/">
+    <picture
+      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/rudderlabs/rudder-sdk-js/develop/assets/rs-logo-full-dark.png">
+      <img alt="RudderStack" width="512" src="https://raw.githubusercontent.com/rudderlabs/rudder-sdk-js/develop/assets/rs-logo-full-light.jpg">
+    </picture>
+  </a>
+</p>
 
 # What is RudderStack?
 
