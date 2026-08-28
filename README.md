@@ -1,3 +1,27 @@
+> ⚠️ **DEPRECATED — End of Life: December 1, 2026**
+>
+> **The RudderStack Cordova SDK is no longer actively maintained and will reach end-of-life on December 1, 2026.**
+>
+> Please migrate to the **RudderStack JavaScript SDK** used inside a **Capacitor** app:
+> - **Repository**: <https://github.com/rudderlabs/rudder-sdk-js>
+> - **Documentation**: <https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-javascript-sdk/>
+>
+> Alternatives for teams doing a broader mobile rewrite:
+> - **React Native**
+>   - Docs: https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-react-native-sdk/
+>   - GitHub: https://github.com/rudderlabs/rudder-sdk-react-native
+> - **Flutter**
+>   - Docs: https://www.rudderstack.com/docs/sources/event-streams/sdks/rudderstack-flutter-sdk/
+>   - GitHub: https://github.com/rudderlabs/rudder-sdk-flutter
+> - **Swift SDK** (iOS native)
+>   - Docs: https://www.rudderstack.com/docs/sources/event-streams/sdks/swift-sdk/
+>   - GitHub: https://github.com/rudderlabs/rudder-sdk-swift
+> - **Kotlin SDK** (Android native)
+>   - Docs: https://www.rudderstack.com/docs/sources/event-streams/sdks/kotlin-sdk/
+>   - GitHub: https://github.com/rudderlabs/rudder-sdk-kotlin
+>
+> Existing sources and connections remain functional. No new Cordova sources can be created after this date.
+---
 <p align="center">
   <a href="https://rudderstack.com/">
     <picture>
